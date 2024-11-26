@@ -1,195 +1,202 @@
+// LaptopStoreSurveyFrame.java
 import javax.swing.*;
+import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.border.*;
+import java.util.*;
+import java.io.*;
 
 public class LaptopStoreSurveyFrame extends JFrame {
-    // Constants for styling
     private static final Color BACKGROUND_COLOR = new Color(248, 249, 250);
-    private static final Color BUTTON_COLOR = new Color(13, 110, 253);
-    private static final Color PANEL_COLOR = new Color(255, 255, 255);
-    private static final Font HEADER_FONT = new Font("Segoe UI", Font.BOLD, 24);
-    private static final Font LABEL_FONT = new Font("Segoe UI", Font.PLAIN, 14);
+    private static final Font LABEL_FONT = new Font("Segoe UI", Font.BOLD, 12);
+    private static final Map<String, String> DISPLAY_NAMES = new HashMap<>() {{
+        put("Type (ex. Student; Professional; Gaming; etc.)", "Type");
+        put("CPU - Brand", "CPU Brand");
+        put("GPU brand", "GPU Brand");
+        put("RAM - GB", "RAM (GB)");
+        put("SSD (GB)", "Storage (GB)");
+        put("USB ports", "USB Ports");
+        put("other ports", "Other Ports");
+        put("Disp. (in)", "Display Size");
+        put("Weight (lbs)", "Weight");
+    }};
     
-    // GUI Components
-    private JPanel mainPanel;
-    private JPanel leftPanel;
-    private JPanel rightPanel;
+    private Map<String, Set<String>> optionsMap;
+    private Map<String, JComponent> filterComponents;
+    private JPanel mainPanel, leftPanel, rightPanel;
     private JScrollPane scrollPane;
-    private JButton clearButton;
-    private JButton backButton;
-    private JButton continueButton;
-    private JSlider priceSlider;
+    private JButton clearButton, backButton, continueButton;
     
-    // Form Components
-    private JTextField brandField;
-    private JSlider ratingSlider;
-    private JTextField modelField;
-    private ButtonGroup typeGroup;
-    private JTextField cpuBrandField;
-    private JTextField cpuModelField;
-    private JSpinner coresSpinner;
-    private JTextField speedField;
-    private JSlider speedRatingSlider;
-    private JSpinner ramSpinner;
-    private JSpinner ssdSpinner;
-    private JSlider storageRatingSlider;
-    private JTextField gpuBrandField;
-    private JTextField gpuModelField;
-    private JSpinner usbPortsSpinner;
-    private JTextField otherPortsField;
-    private JTextField osField;
-    private JTextField displaySizeField;
-    private JTextField resolutionField;
-    private JCheckBox touchscreenCheck;
-    private JTextField weightField;
-    private JTextField hyperlinkField;
-
     public LaptopStoreSurveyFrame() {
+        optionsMap = readDatabase();
+        filterComponents = new HashMap<>();
         setupMainFrame();
         initializeComponents();
         layoutComponents();
         addEventListeners();
+        setVisible(true);
     }
+
+    private Map<String, Set<String>> readDatabase() {
+    Map<String, Set<String>> options = new HashMap<>();
+    try (BufferedReader br = new BufferedReader(new FileReader("data/database_cleaned.csv"))) {
+        String[] headers = br.readLine().split(",");
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] values = line.split(",");
+            for (int i = 0; i < headers.length && i < values.length; i++) {
+                if (headers[i].trim().equals("other ports")) {
+                    String[] ports = values[i].split(";");
+                    for (String port : ports) {
+                        options.computeIfAbsent(headers[i], k -> new TreeSet<>()).add(port.trim());
+                    }
+                } else {
+                    options.computeIfAbsent(headers[i], k -> new TreeSet<>()).add(values[i].trim());
+                }
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    return options;
+}
 
     private void setupMainFrame() {
         setTitle("DCS Laptops - Survey");
-        setSize(1920, 1080);
+        setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        
         mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBackground(BACKGROUND_COLOR);
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         setContentPane(mainPanel);
     }
 
     private void initializeComponents() {
-        // Initialize left panel with scroll pane
         leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-        leftPanel.setBackground(PANEL_COLOR);
-        leftPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        leftPanel.setBackground(Color.WHITE);
+        leftPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        leftPanel.setPreferredSize(new Dimension(600, 1200));
 
-        // Add components to left panel
-        addFormComponents();
+        initializePriceRange();
+        initializeRadioButtons("Brand", 3);
+        initializeRadioButtons("Type (ex. Student; Professional; Gaming; etc.)", 2);
+        initializeRadioButtons("CPU - Brand", 2);
+        initializeRadioButtons("GPU brand", 2);
+        initializeRadioButtons("OS", 1);
+        initializeRadioButtons("RAM - GB", 2);
+        initializeRadioButtons("SSD (GB)", 2);
+        initializeSlider("Rating (1-10)", 1, 10);
+        initializeSlider("Speed Rating (1-10)", 1, 10);
+        initializeRadioButtons("USB ports", 2);
+        initializeRadioButtons("other ports", 2);
+        initializeRadioButtons("Disp. (in)", 2);
+        initializeRadioButtons("Weight (lbs)", 2);
+        initializeCheckBox("Touchscreen");
 
-        scrollPane = new JScrollPane(leftPanel);
-        scrollPane.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-        
-        // Initialize right panel with buttons
-        rightPanel = new JPanel();
-        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-        rightPanel.setBackground(BACKGROUND_COLOR);
-        rightPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 20));
-        
-        // Initialize buttons with modern styling
         clearButton = createStyledButton("Clear");
         backButton = createStyledButton("Back");
         continueButton = createStyledButton("Continue");
+        
+        rightPanel = new JPanel();
+        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+        rightPanel.setBackground(BACKGROUND_COLOR);
+        rightPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
     }
 
-    private void addFormComponents() {
-        // Add title
-        JLabel titleLabel = new JLabel("What Kind of Laptop do you Prefer?");
-        titleLabel.setFont(HEADER_FONT);
-        titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        leftPanel.add(titleLabel);
-        leftPanel.add(Box.createVerticalStrut(20));
-
-        // Add price range slider
-        JLabel priceLabel = new JLabel("Price Range");
-        priceLabel.setFont(LABEL_FONT);
-        priceSlider = new JSlider(0, 5000, 1000);
-        priceSlider.setMajorTickSpacing(1000);
-        priceSlider.setPaintTicks(true);
-        priceSlider.setPaintLabels(true);
-        leftPanel.add(priceLabel);
-        leftPanel.add(priceSlider);
-        leftPanel.add(Box.createVerticalStrut(20));
-
-        // Add brand preference radio buttons
-        JLabel brandLabel = new JLabel("Brand Preference");
-        brandLabel.setFont(LABEL_FONT);
-        leftPanel.add(brandLabel);
+    private void initializePriceRange() {
+        Set<String> prices = optionsMap.get("Price");
+        double minPrice = prices.stream().mapToDouble(p -> Double.parseDouble(p)).min().getAsDouble();
+        double maxPrice = prices.stream().mapToDouble(p -> Double.parseDouble(p)).max().getAsDouble();
         
-        String[] brands = {"Apple", "Asus", "Lenovo", "ROG", "Acer", "HP"};
-        ButtonGroup brandGroup = new ButtonGroup();
-        JPanel brandPanel = new JPanel(new GridLayout(2, 3, 10, 5));
-        brandPanel.setBackground(PANEL_COLOR);
+        JPanel pricePanel = new JPanel(new BorderLayout(5, 0));
+        pricePanel.setMaximumSize(new Dimension(580, 40));
         
-        for (String brand : brands) {
-            JRadioButton radioButton = new JRadioButton(brand);
-            radioButton.setFont(LABEL_FONT);
-            brandGroup.add(radioButton);
-            brandPanel.add(radioButton);
+        JSpinner minSpinner = new JSpinner(new SpinnerNumberModel(minPrice, minPrice, maxPrice, 50.0));
+        JSpinner maxSpinner = new JSpinner(new SpinnerNumberModel(maxPrice, minPrice, maxPrice, 50.0));
+        
+        JPanel spinnerPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        spinnerPanel.add(new JLabel("Min: $"));
+        spinnerPanel.add(minSpinner);
+        spinnerPanel.add(new JLabel("Max: $"));
+        spinnerPanel.add(maxSpinner);
+
+        pricePanel.add(new JLabel("Price Range"), BorderLayout.WEST);
+        pricePanel.add(spinnerPanel, BorderLayout.EAST);
+
+        filterComponents.put("minPrice", minSpinner);
+        filterComponents.put("maxPrice", maxSpinner);
+        leftPanel.add(pricePanel);
+        leftPanel.add(Box.createVerticalStrut(5));
+    }
+
+    private void initializeRadioButtons(String category, int rows) {
+        Set<String> options = optionsMap.get(category);
+        if (options == null) return;
+
+        JPanel panel = new JPanel(new GridLayout(0, 3, 5, 5));
+        panel.setMaximumSize(new Dimension(580, rows * 35));
+        String displayName = DISPLAY_NAMES.getOrDefault(category, category);
+        panel.setBorder(BorderFactory.createTitledBorder(displayName));
+
+        ButtonGroup group = new ButtonGroup();
+        JRadioButton noneButton = new JRadioButton("None");
+        group.add(noneButton);
+        panel.add(noneButton);
+
+        for (String option : options) {
+            JRadioButton button = new JRadioButton(option);
+            group.add(button);
+            panel.add(button);
         }
-        leftPanel.add(brandPanel);
-        leftPanel.add(Box.createVerticalStrut(20));
 
-        // Add type selection
-        JLabel typeLabel = new JLabel("Type");
-        typeLabel.setFont(LABEL_FONT);
-        leftPanel.add(typeLabel);
-        
-        String[] types = {"Professional", "Student", "Gaming"};
-        typeGroup = new ButtonGroup();
-        JPanel typePanel = new JPanel(new GridLayout(1, 3, 10, 5));
-        typePanel.setBackground(PANEL_COLOR);
-        
-        for (String type : types) {
-            JRadioButton radioButton = new JRadioButton(type);
-            radioButton.setFont(LABEL_FONT);
-            typeGroup.add(radioButton);
-            typePanel.add(radioButton);
+        int cells = rows * 3;
+        while (panel.getComponentCount() < cells) {
+            panel.add(new JLabel());
         }
-        leftPanel.add(typePanel);
-        
-        // Add remaining form fields
-        addFormField("Model", modelField = new JTextField());
-        addFormField("CPU Brand", cpuBrandField = new JTextField());
-        addFormField("CPU Model", cpuModelField = new JTextField());
-        // ... Add other fields similarly
+
+        filterComponents.put(category, panel);
+        leftPanel.add(panel);
+        leftPanel.add(Box.createVerticalStrut(5));
     }
 
-    private void addFormField(String labelText, JComponent field) {
-        JLabel label = new JLabel(labelText);
-        label.setFont(LABEL_FONT);
-        label.setAlignmentX(Component.LEFT_ALIGNMENT);
-        leftPanel.add(label);
+    private void initializeSlider(String category, int min, int max) {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setMaximumSize(new Dimension(580, 50));
+        panel.setBorder(BorderFactory.createTitledBorder(category));
         
-        field.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
-        field.setAlignmentX(Component.LEFT_ALIGNMENT);
-        leftPanel.add(field);
-        leftPanel.add(Box.createVerticalStrut(10));
+        JSlider slider = new JSlider(min, max);
+        slider.setPaintTicks(true);
+        slider.setPaintLabels(true);
+        slider.setMajorTickSpacing(1);
+        
+        panel.add(slider, BorderLayout.CENTER);
+        
+        filterComponents.put(category, slider);
+        leftPanel.add(panel);
+        leftPanel.add(Box.createVerticalStrut(5));
     }
 
-    private JButton createStyledButton(String text) {
-        JButton button = new JButton(text);
-        button.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        button.setBackground(BUTTON_COLOR);
-        button.setForeground(Color.WHITE);
-        button.setFocusPainted(false);
-        button.setBorderPainted(false);
-        button.setMaximumSize(new Dimension(150, 40));
-        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+    private void initializeCheckBox(String category) {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setMaximumSize(new Dimension(580, 30));
         
-        // Add hover effect
-        button.addMouseListener(new MouseAdapter() {
-            public void mouseEntered(MouseEvent e) {
-                button.setBackground(button.getBackground().darker());
-            }
-            public void mouseExited(MouseEvent e) {
-                button.setBackground(BUTTON_COLOR);
-            }
-        });
+        JCheckBox checkBox = new JCheckBox(category);
+        panel.add(checkBox, BorderLayout.WEST);
         
-        return button;
+        filterComponents.put(category, checkBox);
+        leftPanel.add(panel);
+        leftPanel.add(Box.createVerticalStrut(5));
     }
 
     private void layoutComponents() {
-        // Add scroll pane to main panel
+        scrollPane = new JScrollPane(leftPanel);
+        scrollPane.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
-        
-        // Add buttons to right panel
+
         rightPanel.add(Box.createVerticalGlue());
         rightPanel.add(clearButton);
         rightPanel.add(Box.createVerticalStrut(10));
@@ -198,26 +205,70 @@ public class LaptopStoreSurveyFrame extends JFrame {
         rightPanel.add(continueButton);
         rightPanel.add(Box.createVerticalGlue());
         
-        // Add right panel to main panel
         mainPanel.add(rightPanel, BorderLayout.EAST);
+    }
+
+    private JButton createStyledButton(String text) {
+        JButton button = new JButton(text);
+        button.setFont(LABEL_FONT);
+        button.setMaximumSize(new Dimension(100, 30));
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button.setBackground(new Color(13, 110, 253));
+        button.setForeground(Color.WHITE);
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        return button;
     }
 
     private void addEventListeners() {
         clearButton.addActionListener(e -> clearForm());
-        backButton.addActionListener(e -> goBack());
-        continueButton.addActionListener(e -> continue_());
+        backButton.addActionListener(e -> dispose());
+        continueButton.addActionListener(e -> getFilterValues());
     }
 
     private void clearForm() {
-        // Implementation for clearing the form
+        for (JComponent component : filterComponents.values()) {
+            if (component instanceof JPanel) {
+                for (Component c : ((JPanel)component).getComponents()) {
+                    if (c instanceof JRadioButton) {
+                        if (((JRadioButton)c).getText().equals("None")) {
+                            ((JRadioButton)c).setSelected(true);
+                        } else {
+                            ((JRadioButton)c).setSelected(false);
+                        }
+                    }
+                }
+            } else if (component instanceof JSlider) {
+                ((JSlider)component).setValue(((JSlider)component).getMinimum());
+            } else if (component instanceof JSpinner) {
+                ((JSpinner)component).setValue(((SpinnerNumberModel)((JSpinner)component).getModel()).getMinimum());
+            } else if (component instanceof JCheckBox) {
+                ((JCheckBox)component).setSelected(false);
+            }
+        }
     }
 
-    private void goBack() {
-        this.dispose();
-        new LaptopStoreTitleFrame();
-    }
-
-    private void continue_() {
-        // Implementation for continuing to next frame
+    public Map<String, Object> getFilterValues() {
+        Map<String, Object> values = new HashMap<>();
+        for (Map.Entry<String, JComponent> entry : filterComponents.entrySet()) {
+            String key = entry.getKey();
+            JComponent component = entry.getValue();
+            
+            if (component instanceof JPanel) {
+                for (Component c : ((JPanel)component).getComponents()) {
+                    if (c instanceof JRadioButton && ((JRadioButton)c).isSelected()) {
+                        String selectedValue = ((JRadioButton)c).getText();
+                        values.put(key, selectedValue.equals("None") ? null : selectedValue);
+                    }
+                }
+            } else if (component instanceof JSlider) {
+                values.put(key, ((JSlider)component).getValue());
+            } else if (component instanceof JSpinner) {
+                values.put(key, ((JSpinner)component).getValue());
+            } else if (component instanceof JCheckBox) {
+                values.put(key, ((JCheckBox)component).isSelected());
+            }
+        }
+        return values;
     }
 }
