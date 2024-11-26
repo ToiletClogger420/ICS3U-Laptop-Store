@@ -15,7 +15,11 @@ public class LaptopStoreFileInput {
 		try {
 
 			// scan for file
+<<<<<<< HEAD
+			Scanner inputFile = new Scanner(new File("./data/database.csv"));
+=======
 			Scanner inputFile = new Scanner(new File("data/database.csv"));
+>>>>>>> d961edc61391a82c416718056991251b3abed842
 
 			// input file delimiter
 			inputFile.useDelimiter(",|\r\n");
