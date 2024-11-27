@@ -15,11 +15,7 @@ public class LaptopStoreFileInput {
 		try {
 
 			// scan for file
-<<<<<<< HEAD
-			Scanner inputFile = new Scanner(new File("./data/database.csv"));
-=======
-			Scanner inputFile = new Scanner(new File("data/database.csv"));
->>>>>>> d961edc61391a82c416718056991251b3abed842
+			Scanner inputFile = new Scanner(new File("data//database.csv"));
 
 			// input file delimiter
 			inputFile.useDelimiter(",|\r\n");
@@ -73,8 +69,6 @@ public class LaptopStoreFileInput {
 				LaptopStoreApplication.laptopArray[index] = new Laptop(model, cpuModel, gpuModel, brand, cpuBrand,
 						gpuBrand, laptopCost, type, cores, speedGHZ, speedRating, storageRating, customerRating, ram,
 						ssd, usbPorts, otherPorts, os, displaySize, displayResolution, touchscreen, weight, link);
-
-				System.out.println(LaptopStoreApplication.laptopArray[index]);
 			}
 
 			// close input, it actually matters
