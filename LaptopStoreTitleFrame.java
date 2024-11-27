@@ -104,7 +104,13 @@ public class LaptopStoreTitleFrame extends JFrame implements ActionListener {
     }
 
     private void finalFrameSetup() {
-        setSize(1920, 1080); // 修改窗口尺寸为1920x1080
+        setSize(1920, 1080);
+
+        // setting logo of window
+        ImageIcon icon = new ImageIcon("images/logo_square.png");
+        Image scaledIcon = icon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
+        setIconImage(scaledIcon);
+        
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Laptop Store");

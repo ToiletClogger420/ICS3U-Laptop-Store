@@ -74,6 +74,12 @@ public class LaptopStoreSurveyFrame extends JFrame {
     private void setupMainFrame() {
         setTitle("DCS Laptops - Survey");
         setSize(1920, 1080);
+        
+        // setting logo of window
+        ImageIcon icon = new ImageIcon("images/logo_square.png");
+        Image scaledIcon = icon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
+        setIconImage(scaledIcon);
+        
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         
