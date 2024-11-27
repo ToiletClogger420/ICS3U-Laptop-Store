@@ -8,8 +8,8 @@ public class LaptopStoreTitleFrame extends JFrame implements ActionListener {
     private static final Color TITLE_COLOR = new Color(33, 37, 41);
     private static final Color BUTTON_COLOR = new Color(13, 110, 253);
     private static final Color BUTTON_HOVER_COLOR = new Color(0, 85, 227);
-    private static final int TITLE_SIZE = 48; // 增大标题字体
-    private static final int BUTTON_TEXT_SIZE = 20; // 增大按钮字体
+    private static final int TITLE_SIZE = 36;
+    private static final int BUTTON_TEXT_SIZE = 16;
     
     private JLabel titleLabel = new JLabel("Laptop Store");
     private ImageIcon originalLogo = new ImageIcon("images/logo.png");
@@ -30,7 +30,7 @@ public class LaptopStoreTitleFrame extends JFrame implements ActionListener {
         mainPanel = new JPanel();
         mainPanel.setLayout(new GridBagLayout());
         mainPanel.setBackground(BACKGROUND_COLOR);
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(60, 60, 60, 60)); // 增加边距
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
         setContentPane(mainPanel);
     }
 
@@ -41,17 +41,16 @@ public class LaptopStoreTitleFrame extends JFrame implements ActionListener {
         
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, TITLE_SIZE));
         titleLabel.setForeground(TITLE_COLOR);
-        gbc.insets = new Insets(0, 0, 50, 0); // 增加标题下方间距
+        gbc.insets = new Insets(0, 0, 30, 0);
         mainPanel.add(titleLabel, gbc);
 
-        // 增大 logo 尺寸
-        Image scaledImage = originalLogo.getImage().getScaledInstance(450, 254, Image.SCALE_SMOOTH);
+        Image scaledImage = originalLogo.getImage().getScaledInstance(300, 169, Image.SCALE_SMOOTH);
         logo = new ImageIcon(scaledImage);
         logoLabel = new JLabel(logo) {
             @Override
             protected void paintComponent(Graphics g) {
-                int shadowGap = 8; // 增大阴影
-                int shadowOffset = 6; // 增大阴影偏移
+                int shadowGap = 5;
+                int shadowOffset = 4;
                 Graphics2D g2 = (Graphics2D) g;
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 g2.setColor(new Color(0, 0, 0, 50));
@@ -59,11 +58,12 @@ public class LaptopStoreTitleFrame extends JFrame implements ActionListener {
                 super.paintComponent(g);
             }
         };
-        logoLabel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15)); // 增加logo内边距
-        gbc.insets = new Insets(0, 0, 70, 0); // 增加logo下方间距
+        logoLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        gbc.insets = new Insets(0, 0, 50, 0);
         mainPanel.add(logoLabel, gbc);
 
-        buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 0)); // 增加按钮间距
+        // Create button panel for horizontal layout
+        buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
         buttonPanel.setBackground(BACKGROUND_COLOR);
 
         setupButton(surveyButton);
@@ -77,7 +77,7 @@ public class LaptopStoreTitleFrame extends JFrame implements ActionListener {
     }
 
     private void setupButton(JButton button) {
-        button.setPreferredSize(new Dimension(350, 80)); // 增大按钮尺寸
+        button.setPreferredSize(new Dimension(250, 60));
         button.setFont(new Font("Segoe UI", Font.BOLD, BUTTON_TEXT_SIZE));
         button.setForeground(Color.WHITE);
         button.setBackground(BUTTON_COLOR);
@@ -85,7 +85,7 @@ public class LaptopStoreTitleFrame extends JFrame implements ActionListener {
         button.setFocusPainted(false);
         button.setOpaque(true);
         
-        button.setBorder(new EmptyBorder(15, 35, 15, 35)); // 增加按钮内边距
+        button.setBorder(new EmptyBorder(10, 25, 10, 25));
         button.putClientProperty("JButton.buttonType", "roundRect");
         
         button.addMouseListener(new MouseAdapter() {
@@ -104,7 +104,7 @@ public class LaptopStoreTitleFrame extends JFrame implements ActionListener {
     }
 
     private void finalFrameSetup() {
-        setSize(1920, 1080); // 修改窗口尺寸为1920x1080
+        setSize(1000, 700);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("Laptop Store");

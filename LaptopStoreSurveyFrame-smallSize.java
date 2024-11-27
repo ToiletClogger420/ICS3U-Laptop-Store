@@ -1,7 +1,6 @@
 import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
-import javax.swing.border.TitledBorder;
 import java.awt.event.*;
 import java.util.Map;
 import java.util.Set;
@@ -12,7 +11,7 @@ import java.io.*;
 
 public class LaptopStoreSurveyFrame extends JFrame {
     private static final Color BACKGROUND_COLOR = new Color(248, 249, 250);
-    private static final Font LABEL_FONT = new Font("Segoe UI", Font.BOLD, 21);
+    private static final Font LABEL_FONT = new Font("Segoe UI", Font.BOLD, 12);
     private static final Map<String, String> DISPLAY_NAMES = new HashMap<>() {{
         put("Type (ex. Student; Professional; Gaming; etc.)", "Type");
         put("CPU - Brand", "CPU Brand");
@@ -73,13 +72,13 @@ public class LaptopStoreSurveyFrame extends JFrame {
 
     private void setupMainFrame() {
         setTitle("DCS Laptops - Survey");
-        setSize(1920, 1080);
+        setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         
-        mainPanel = new JPanel(new BorderLayout(20, 20)); // 增加间距
+        mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBackground(BACKGROUND_COLOR);
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25)); // 增加边距
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         setContentPane(mainPanel);
     }
 
@@ -87,23 +86,23 @@ public class LaptopStoreSurveyFrame extends JFrame {
         leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         leftPanel.setBackground(Color.WHITE);
-        leftPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        // leftPanel.setPreferredSize(new Dimension(1600, 900)); // 调整左面板大小
+        leftPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        leftPanel.setPreferredSize(new Dimension(600, 1200));
 
         initializePriceRange();
-        initializeCheckBoxes("Brand", 4); // 增加行数以适应更大的空间
-        initializeCheckBoxes("Type (ex. Student; Professional; Gaming; etc.)", 3);
-        initializeCheckBoxes("CPU - Brand", 3);
-        initializeCheckBoxes("GPU brand", 3);
-        initializeCheckBoxes("OS", 2);
-        initializeCheckBoxes("RAM - GB", 3);
-        initializeCheckBoxes("SSD (GB)", 3);
+        initializeCheckBoxes("Brand", 3);
+        initializeCheckBoxes("Type (ex. Student; Professional; Gaming; etc.)", 2);
+        initializeCheckBoxes("CPU - Brand", 2);
+        initializeCheckBoxes("GPU brand", 2);
+        initializeCheckBoxes("OS", 1);
+        initializeCheckBoxes("RAM - GB", 2);
+        initializeCheckBoxes("SSD (GB)", 2);
         initializeSlider("Rating (1-10)", 1, 10);
         initializeSlider("Speed Rating (1-10)", 1, 10);
-        initializeCheckBoxes("USB ports", 3);
-        initializeCheckBoxes("other ports", 3);
-        initializeCheckBoxes("Disp. (in)", 3);
-        initializeCheckBoxes("Weight (lbs)", 3);
+        initializeCheckBoxes("USB ports", 2);
+        initializeCheckBoxes("other ports", 2);
+        initializeCheckBoxes("Disp. (in)", 2);
+        initializeCheckBoxes("Weight (lbs)", 2);
         initializeCheckBox("Touchscreen");
 
         clearButton = createStyledButton("Clear");
@@ -113,8 +112,7 @@ public class LaptopStoreSurveyFrame extends JFrame {
         rightPanel = new JPanel();
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.setBackground(BACKGROUND_COLOR);
-        rightPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        rightPanel.setPreferredSize(new Dimension(200, 1080)); // 调整右面板大小
+        rightPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
     }
 
     private void initializePriceRange() {
@@ -122,148 +120,91 @@ public class LaptopStoreSurveyFrame extends JFrame {
         double minPrice = prices.stream().mapToDouble(p -> Double.parseDouble(p)).min().getAsDouble();
         double maxPrice = prices.stream().mapToDouble(p -> Double.parseDouble(p)).max().getAsDouble();
         
-        JPanel pricePanel = new JPanel(new BorderLayout(10, 0));
-        pricePanel.setMaximumSize(new Dimension(1500, 60)); // 调整尺寸
+        JPanel pricePanel = new JPanel(new BorderLayout(5, 0));
+        pricePanel.setMaximumSize(new Dimension(580, 40));
         
         JSpinner minSpinner = new JSpinner(new SpinnerNumberModel(minPrice, minPrice, maxPrice, 50.0));
         JSpinner maxSpinner = new JSpinner(new SpinnerNumberModel(maxPrice, minPrice, maxPrice, 50.0));
         
-        // 调整Spinner的大小
-        Dimension spinnerSize = new Dimension(150, 30);
-        minSpinner.setPreferredSize(spinnerSize);
-        maxSpinner.setPreferredSize(spinnerSize);
-        
         JPanel spinnerPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         spinnerPanel.add(new JLabel("Min: $"));
         spinnerPanel.add(minSpinner);
-        spinnerPanel.add(Box.createHorizontalStrut(20)); // 增加间距
         spinnerPanel.add(new JLabel("Max: $"));
         spinnerPanel.add(maxSpinner);
 
-        JLabel priceLabel = new JLabel("Price Range");
-        priceLabel.setFont(LABEL_FONT);
-        pricePanel.add(priceLabel, BorderLayout.WEST);
+        pricePanel.add(new JLabel("Price Range"), BorderLayout.WEST);
         pricePanel.add(spinnerPanel, BorderLayout.EAST);
 
         filterComponents.put("minPrice", minSpinner);
         filterComponents.put("maxPrice", maxSpinner);
         leftPanel.add(pricePanel);
-        leftPanel.add(Box.createVerticalStrut(10));
+        leftPanel.add(Box.createVerticalStrut(5));
     }
 
     private void initializeCheckBoxes(String category, int rows) {
         Set<String> options = optionsMap.get(category);
         if (options == null || options.isEmpty()) return;
 
-        // 创建一个面板使用 GridBagLayout 来获得更好的控制
-        JPanel panel = new JPanel(new GridBagLayout());
-        panel.setMaximumSize(new Dimension(1500, rows * 50));  // 增加行高
+        JPanel panel = new JPanel(new GridLayout(0, 3, 5, 5));
+        panel.setMaximumSize(new Dimension(580, rows * 35));
         String displayName = DISPLAY_NAMES.getOrDefault(category, category);
-        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY), 
-                       displayName, TitledBorder.LEFT, TitledBorder.TOP, LABEL_FONT));
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(5, 5, 5, 5);  // 增加内边距
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-
-        int col = 0;
-        int row = 0;
-        
-        // 计算需要的列数，确保选项分布均匀
-        int totalColumns = 4;
+        panel.setBorder(BorderFactory.createTitledBorder(displayName));
 
         for (String option : options) {
             JCheckBox checkBox = new JCheckBox(option);
-            checkBox.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-            
-            // 设置最小尺寸以确保复选框不会被压缩
-            checkBox.setMinimumSize(new Dimension(200, 30));
-            checkBox.setPreferredSize(new Dimension(350, 30));
-            
-            gbc.gridx = col;
-            gbc.gridy = row;
-            
-            panel.add(checkBox, gbc);
-            
-            col++;
-            if (col >= totalColumns) {
-                col = 0;
-                row++;
-            }
+            panel.add(checkBox);
         }
 
-        // 填充剩余空间
-        while (col < totalColumns && row < rows) {
-            gbc.gridx = col;
-            gbc.gridy = row;
-            panel.add(Box.createHorizontalStrut(350), gbc);
-            col++;
-            if (col >= totalColumns) {
-                col = 0;
-                row++;
-            }
+        int cells = rows * 3;
+        while (panel.getComponentCount() < cells) {
+            panel.add(new JLabel());
         }
 
         filterComponents.put(category, panel);
         leftPanel.add(panel);
-        leftPanel.add(Box.createVerticalStrut(10));
+        leftPanel.add(Box.createVerticalStrut(5));
     }
 
     private void initializeSlider(String category, int min, int max) {
-        JPanel panel = new JPanel(new BorderLayout(10, 0));
-        panel.setMaximumSize(new Dimension(1500, 70)); // 调整尺寸
-        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY), 
-                       category, TitledBorder.LEFT, TitledBorder.TOP, LABEL_FONT));
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setMaximumSize(new Dimension(580, 50));
+        panel.setBorder(BorderFactory.createTitledBorder(category));
         
         JSlider slider = new JSlider(min, max);
         slider.setPaintTicks(true);
         slider.setPaintLabels(true);
         slider.setMajorTickSpacing(1);
-        slider.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         
         panel.add(slider, BorderLayout.CENTER);
         
         filterComponents.put(category, slider);
         leftPanel.add(panel);
-        leftPanel.add(Box.createVerticalStrut(10));
+        leftPanel.add(Box.createVerticalStrut(5));
     }
 
     private void initializeCheckBox(String category) {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setMaximumSize(new Dimension(1500, 40)); // 调整尺寸
+        panel.setMaximumSize(new Dimension(580, 30));
         
         JCheckBox checkBox = new JCheckBox(category);
-        checkBox.setFont(LABEL_FONT);
         panel.add(checkBox, BorderLayout.WEST);
         
         filterComponents.put(category, checkBox);
         leftPanel.add(panel);
-        leftPanel.add(Box.createVerticalStrut(10));
+        leftPanel.add(Box.createVerticalStrut(5));
     }
 
     private void layoutComponents() {
-        // 创建一个面板来包含leftPanel，并设置其首选大小
-        JPanel containerPanel = new JPanel(new BorderLayout());
-        containerPanel.add(leftPanel, BorderLayout.NORTH);
-        containerPanel.setBackground(Color.WHITE);
-
-        scrollPane = new JScrollPane(containerPanel);
+        scrollPane = new JScrollPane(leftPanel);
         scrollPane.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-        
-        // 设置scrollPane的首选大小
-        scrollPane.setPreferredSize(new Dimension(1600, 900));
-        
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
         rightPanel.add(Box.createVerticalGlue());
         rightPanel.add(clearButton);
-        rightPanel.add(Box.createVerticalStrut(20));
+        rightPanel.add(Box.createVerticalStrut(10));
         rightPanel.add(backButton);
-        rightPanel.add(Box.createVerticalStrut(20));
+        rightPanel.add(Box.createVerticalStrut(10));
         rightPanel.add(continueButton);
         rightPanel.add(Box.createVerticalGlue());
         
@@ -273,8 +214,7 @@ public class LaptopStoreSurveyFrame extends JFrame {
     private JButton createStyledButton(String text) {
         JButton button = new JButton(text);
         button.setFont(LABEL_FONT);
-        button.setMaximumSize(new Dimension(150, 40)); // 增大按钮尺寸
-        button.setPreferredSize(new Dimension(150, 40));
+        button.setMaximumSize(new Dimension(100, 30));
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.setBackground(new Color(13, 110, 253));
         button.setForeground(Color.WHITE);
