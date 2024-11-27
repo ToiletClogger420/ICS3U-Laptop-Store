@@ -1,9 +1,12 @@
-// LaptopStoreSurveyFrame.java
 import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
+import java.util.HashMap;
+import java.util.TreeSet;
+import java.util.ArrayList;
 import java.io.*;
 
 public class LaptopStoreSurveyFrame extends JFrame {
@@ -38,28 +41,34 @@ public class LaptopStoreSurveyFrame extends JFrame {
     }
 
     private Map<String, Set<String>> readDatabase() {
-    Map<String, Set<String>> options = new HashMap<>();
-    try (BufferedReader br = new BufferedReader(new FileReader("data/database.csv"))) {
-        String[] headers = br.readLine().split(",");
-        String line;
-        while ((line = br.readLine()) != null) {
-            String[] values = line.split(",");
-            for (int i = 0; i < headers.length && i < values.length; i++) {
-                if (headers[i].trim().equals("other ports")) {
-                    String[] ports = values[i].split(";");
-                    for (String port : ports) {
-                        options.computeIfAbsent(headers[i], k -> new TreeSet<>()).add(port.trim());
+        Map<String, Set<String>> options = new HashMap<>();
+        try (BufferedReader br = new BufferedReader(new FileReader("data/database.csv"))) {
+            String[] headers = br.readLine().split(",");
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] values = line.split(",");
+                for (int i = 0; i < headers.length && i < values.length; i++) {
+                    if (headers[i].trim().equals("other ports")) {
+                        String[] ports = values[i].split(";");
+                        for (String port : ports) {
+                            String trimmedPort = port.trim();
+                            if (!trimmedPort.isEmpty()) {
+                                options.computeIfAbsent(headers[i], k -> new TreeSet<>()).add(trimmedPort);
+                            }
+                        }
+                    } else {
+                        String trimmedValue = values[i].trim();
+                        if (!trimmedValue.isEmpty()) {
+                            options.computeIfAbsent(headers[i], k -> new TreeSet<>()).add(trimmedValue);
+                        }
                     }
-                } else {
-                    options.computeIfAbsent(headers[i], k -> new TreeSet<>()).add(values[i].trim());
                 }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-    } catch (IOException e) {
-        e.printStackTrace();
+        return options;
     }
-    return options;
-}
 
     private void setupMainFrame() {
         setTitle("DCS Laptops - Survey");
@@ -81,19 +90,19 @@ public class LaptopStoreSurveyFrame extends JFrame {
         leftPanel.setPreferredSize(new Dimension(600, 1200));
 
         initializePriceRange();
-        initializeRadioButtons("Brand", 3);
-        initializeRadioButtons("Type (ex. Student; Professional; Gaming; etc.)", 2);
-        initializeRadioButtons("CPU - Brand", 2);
-        initializeRadioButtons("GPU brand", 2);
-        initializeRadioButtons("OS", 1);
-        initializeRadioButtons("RAM - GB", 2);
-        initializeRadioButtons("SSD (GB)", 2);
+        initializeCheckBoxes("Brand", 3);
+        initializeCheckBoxes("Type (ex. Student; Professional; Gaming; etc.)", 2);
+        initializeCheckBoxes("CPU - Brand", 2);
+        initializeCheckBoxes("GPU brand", 2);
+        initializeCheckBoxes("OS", 1);
+        initializeCheckBoxes("RAM - GB", 2);
+        initializeCheckBoxes("SSD (GB)", 2);
         initializeSlider("Rating (1-10)", 1, 10);
         initializeSlider("Speed Rating (1-10)", 1, 10);
-        initializeRadioButtons("USB ports", 2);
-        initializeRadioButtons("other ports", 2);
-        initializeRadioButtons("Disp. (in)", 2);
-        initializeRadioButtons("Weight (lbs)", 2);
+        initializeCheckBoxes("USB ports", 2);
+        initializeCheckBoxes("other ports", 2);
+        initializeCheckBoxes("Disp. (in)", 2);
+        initializeCheckBoxes("Weight (lbs)", 2);
         initializeCheckBox("Touchscreen");
 
         clearButton = createStyledButton("Clear");
@@ -132,24 +141,18 @@ public class LaptopStoreSurveyFrame extends JFrame {
         leftPanel.add(Box.createVerticalStrut(5));
     }
 
-    private void initializeRadioButtons(String category, int rows) {
+    private void initializeCheckBoxes(String category, int rows) {
         Set<String> options = optionsMap.get(category);
-        if (options == null) return;
+        if (options == null || options.isEmpty()) return;
 
         JPanel panel = new JPanel(new GridLayout(0, 3, 5, 5));
         panel.setMaximumSize(new Dimension(580, rows * 35));
         String displayName = DISPLAY_NAMES.getOrDefault(category, category);
         panel.setBorder(BorderFactory.createTitledBorder(displayName));
 
-        ButtonGroup group = new ButtonGroup();
-        JRadioButton noneButton = new JRadioButton("None");
-        group.add(noneButton);
-        panel.add(noneButton);
-
         for (String option : options) {
-            JRadioButton button = new JRadioButton(option);
-            group.add(button);
-            panel.add(button);
+            JCheckBox checkBox = new JCheckBox(option);
+            panel.add(checkBox);
         }
 
         int cells = rows * 3;
@@ -226,19 +229,21 @@ public class LaptopStoreSurveyFrame extends JFrame {
             dispose();  // Close Current Window
             new LaptopStoreTitleFrame();  // Open new TitleFrame
         });
-        continueButton.addActionListener(e -> getFilterValues());
+        continueButton.addActionListener(e -> {
+            Map<String, Object> values = getFilterValues();
+            // 打印选中的值用于测试
+            for (Map.Entry<String, Object> entry : values.entrySet()) {
+                System.out.println(entry.getKey() + ": " + entry.getValue());
+            }
+        });
     }
 
     private void clearForm() {
         for (JComponent component : filterComponents.values()) {
             if (component instanceof JPanel) {
                 for (Component c : ((JPanel)component).getComponents()) {
-                    if (c instanceof JRadioButton) {
-                        if (((JRadioButton)c).getText().equals("None")) {
-                            ((JRadioButton)c).setSelected(true);
-                        } else {
-                            ((JRadioButton)c).setSelected(false);
-                        }
+                    if (c instanceof JCheckBox) {
+                        ((JCheckBox)c).setSelected(false);
                     }
                 }
             } else if (component instanceof JSlider) {
@@ -258,11 +263,14 @@ public class LaptopStoreSurveyFrame extends JFrame {
             JComponent component = entry.getValue();
             
             if (component instanceof JPanel) {
+                ArrayList<String> selectedValues = new ArrayList<>();  // 改为直接使用ArrayList
                 for (Component c : ((JPanel)component).getComponents()) {
-                    if (c instanceof JRadioButton && ((JRadioButton)c).isSelected()) {
-                        String selectedValue = ((JRadioButton)c).getText();
-                        values.put(key, selectedValue.equals("None") ? null : selectedValue);
+                    if (c instanceof JCheckBox && ((JCheckBox)c).isSelected()) {
+                        selectedValues.add(((JCheckBox)c).getText());
                     }
+                }
+                if (!selectedValues.isEmpty()) {
+                    values.put(key, selectedValues);
                 }
             } else if (component instanceof JSlider) {
                 values.put(key, ((JSlider)component).getValue());
@@ -273,5 +281,11 @@ public class LaptopStoreSurveyFrame extends JFrame {
             }
         }
         return values;
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new LaptopStoreSurveyFrame();
+        });
     }
 }
