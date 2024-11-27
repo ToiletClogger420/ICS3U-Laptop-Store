@@ -39,7 +39,7 @@ public class LaptopStoreSurveyFrame extends JFrame {
 
     private Map<String, Set<String>> readDatabase() {
     Map<String, Set<String>> options = new HashMap<>();
-    try (BufferedReader br = new BufferedReader(new FileReader("data/database_cleaned.csv"))) {
+    try (BufferedReader br = new BufferedReader(new FileReader("data/database.csv"))) {
         String[] headers = br.readLine().split(",");
         String line;
         while ((line = br.readLine()) != null) {
