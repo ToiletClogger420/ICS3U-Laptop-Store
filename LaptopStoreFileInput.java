@@ -3,6 +3,9 @@
 //the "database" crv file is read and put into the laptop objects
 
 import java.util.Scanner;
+
+import javax.swing.ImageIcon;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 
@@ -69,6 +72,8 @@ public class LaptopStoreFileInput {
 				LaptopStoreApplication.laptopArray[index] = new Laptop(model, cpuModel, gpuModel, brand, cpuBrand,
 						gpuBrand, laptopCost, type, cores, speedGHZ, speedRating, storageRating, customerRating, ram,
 						ssd, usbPorts, otherPorts, os, displaySize, displayResolution, touchscreen, weight, link);
+				
+				LaptopStoreApplication.laptopArray[index].setIcon(new ImageIcon("images/laptop" + index + ".jpg"));
 			}
 
 			// close input, it actually matters
