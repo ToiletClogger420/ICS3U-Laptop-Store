@@ -88,10 +88,9 @@ public class LaptopStoreSurveyFrame extends JFrame {
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         leftPanel.setBackground(Color.WHITE);
         leftPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        // leftPanel.setPreferredSize(new Dimension(1600, 900)); // 调整左面板大小
+        leftPanel.setPreferredSize(new Dimension(1600, 900)); // 调整左面板大小
 
         initializePriceRange();
-<<<<<<< HEAD
         initializeCheckBoxes("Brand", 4); // 增加行数以适应更大的空间
         initializeCheckBoxes("Type (ex. Student; Professional; Gaming; etc.)", 3);
         initializeCheckBoxes("CPU - Brand", 3);
@@ -156,61 +155,21 @@ public class LaptopStoreSurveyFrame extends JFrame {
         Set<String> options = optionsMap.get(category);
         if (options == null || options.isEmpty()) return;
 
-        // 创建一个面板使用 GridBagLayout 来获得更好的控制
-        JPanel panel = new JPanel(new GridBagLayout());
-        panel.setMaximumSize(new Dimension(1500, rows * 50));  // 增加行高
+        JPanel panel = new JPanel(new GridLayout(0, 4, 10, 10)); // 改为4列并增加间距
+        panel.setMaximumSize(new Dimension(1500, rows * 40)); // 调整尺寸
         String displayName = DISPLAY_NAMES.getOrDefault(category, category);
-        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY), 
-                       displayName, TitledBorder.LEFT, TitledBorder.TOP, LABEL_FONT));
-
-<<<<<<< HEAD
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets = new Insets(5, 5, 5, 5);  // 增加内边距
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
-
-        int col = 0;
-        int row = 0;
-        
-        // 计算需要的列数，确保选项分布均匀
-        int totalColumns = 4;
+        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY), displayName, 
+                       TitledBorder.LEFT, TitledBorder.TOP, LABEL_FONT));
 
         for (String option : options) {
             JCheckBox checkBox = new JCheckBox(option);
-            checkBox.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-            
-            // 设置最小尺寸以确保复选框不会被压缩
-            checkBox.setMinimumSize(new Dimension(200, 30));
-            checkBox.setPreferredSize(new Dimension(350, 30));
-            
-            gbc.gridx = col;
-            gbc.gridy = row;
-            
-            panel.add(checkBox, gbc);
-            
-            col++;
-            if (col >= totalColumns) {
-                col = 0;
-                row++;
-            }
-=======
-        for (String option : options) {
-            JCheckBox checkBox = new JCheckBox(option);
+            checkBox.setFont(new Font("Segoe UI", Font.PLAIN, 18)); // 设置选项字体
             panel.add(checkBox);
->>>>>>> 3890a85790f8c0e9eef285b96f78fb9ab8080fd2
         }
 
-        // 填充剩余空间
-        while (col < totalColumns && row < rows) {
-            gbc.gridx = col;
-            gbc.gridy = row;
-            panel.add(Box.createHorizontalStrut(350), gbc);
-            col++;
-            if (col >= totalColumns) {
-                col = 0;
-                row++;
-            }
+        int cells = rows * 4;
+        while (panel.getComponentCount() < cells) {
+            panel.add(new JLabel());
         }
 
         filterComponents.put(category, panel);
@@ -251,24 +210,15 @@ public class LaptopStoreSurveyFrame extends JFrame {
     }
 
     private void layoutComponents() {
-        // 创建一个面板来包含leftPanel，并设置其首选大小
-        JPanel containerPanel = new JPanel(new BorderLayout());
-        containerPanel.add(leftPanel, BorderLayout.NORTH);
-        containerPanel.setBackground(Color.WHITE);
-
-        scrollPane = new JScrollPane(containerPanel);
+        scrollPane = new JScrollPane(leftPanel);
         scrollPane.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-        
-        // 设置scrollPane的首选大小
-        scrollPane.setPreferredSize(new Dimension(1600, 900));
-        
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16); // 改善滚动体验
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
         rightPanel.add(Box.createVerticalGlue());
         rightPanel.add(clearButton);
-        rightPanel.add(Box.createVerticalStrut(20));
+        rightPanel.add(Box.createVerticalStrut(20)); // 增加按钮间距
         rightPanel.add(backButton);
         rightPanel.add(Box.createVerticalStrut(20));
         rightPanel.add(continueButton);
@@ -355,8 +305,4 @@ public class LaptopStoreSurveyFrame extends JFrame {
             new LaptopStoreSurveyFrame();
         });
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 3890a85790f8c0e9eef285b96f78fb9ab8080fd2
