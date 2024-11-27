@@ -91,6 +91,7 @@ public class LaptopStoreSurveyFrame extends JFrame {
         // leftPanel.setPreferredSize(new Dimension(1600, 900)); // 调整左面板大小
 
         initializePriceRange();
+<<<<<<< HEAD
         initializeCheckBoxes("Brand", 4); // 增加行数以适应更大的空间
         initializeCheckBoxes("Type (ex. Student; Professional; Gaming; etc.)", 3);
         initializeCheckBoxes("CPU - Brand", 3);
@@ -162,6 +163,7 @@ public class LaptopStoreSurveyFrame extends JFrame {
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY), 
                        displayName, TitledBorder.LEFT, TitledBorder.TOP, LABEL_FONT));
 
+<<<<<<< HEAD
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 5, 5, 5);  // 增加内边距
@@ -192,6 +194,11 @@ public class LaptopStoreSurveyFrame extends JFrame {
                 col = 0;
                 row++;
             }
+=======
+        for (String option : options) {
+            JCheckBox checkBox = new JCheckBox(option);
+            panel.add(checkBox);
+>>>>>>> 3890a85790f8c0e9eef285b96f78fb9ab8080fd2
         }
 
         // 填充剩余空间
@@ -348,4 +355,8 @@ public class LaptopStoreSurveyFrame extends JFrame {
             new LaptopStoreSurveyFrame();
         });
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 3890a85790f8c0e9eef285b96f78fb9ab8080fd2
