@@ -222,7 +222,10 @@ public class LaptopStoreSurveyFrame extends JFrame {
 
     private void addEventListeners() {
         clearButton.addActionListener(e -> clearForm());
-        backButton.addActionListener(e -> dispose());
+        backButton.addActionListener(e -> {
+            dispose();  // Close Current Window
+            new LaptopStoreTitleFrame();  // Open new TitleFrame
+        });
         continueButton.addActionListener(e -> getFilterValues());
     }
 
