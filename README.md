@@ -40,3 +40,5 @@ The **Laptop Store Application** is a lightweight Java project designed to manag
 ---
 
 This project is currently a work in progress and serves as a foundation for further development.
+
+[Here](https://github.com/StevenChen16/ICS3U-Laptop-Store-Typescript.git)'s the version implemented using typescript
