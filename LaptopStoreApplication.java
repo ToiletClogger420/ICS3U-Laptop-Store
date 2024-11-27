@@ -1,4 +1,7 @@
 
+//Derek Liang, Shawn Lu, Yucheng Chen
+
+
 //laptop store application class
 
 public class LaptopStoreApplication {
@@ -9,7 +12,11 @@ public class LaptopStoreApplication {
 	//main method calls the other methods
 	public static void main(String[]args) {
 		
+		//fill laptop array
 		LaptopStoreFileInput.fillLaptops();
+		
+		//Run the GUI - Title frame
+		new LaptopStoreTitleFrame();
 		
 	}
 	
