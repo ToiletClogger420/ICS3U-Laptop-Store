@@ -1,4 +1,6 @@
-public class Laptop {
+import javax.swing.JLabel;
+
+public class Laptop extends JLabel{
     private String model;
     private String cpuModel;
     private String gpuModel;
