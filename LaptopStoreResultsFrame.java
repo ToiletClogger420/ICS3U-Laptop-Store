@@ -263,34 +263,34 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
    }
 
    //Calculate match score for a laptop based on filter values
-   private double calculateMatchScore(String[] laptop, Map<String, Object> filters) {
+    private double calculateMatchScore(String[] laptop, Map<String, Object> filters) {
         // Hard constraints check
         if (!checkHardConstraints(laptop, filters)) {
             return 0.0;
         }
-
+    
         double score = 0.0;
         Map<String, Double> weights = new HashMap<>();
         
         // Initialize weights
         weights.put("Price", 0.20);
-        weights.put("Brand", 0.05);
+        weights.put("Brand", 0.05); 
         weights.put("Type", 0.10);
         weights.put("CPU Brand", 0.05);
-        weights.put("GPU Brand", 0.05);
+        weights.put("GPU brand", 0.05);
         weights.put("RAM", 0.10);
         weights.put("Storage", 0.10);
         weights.put("Rating", 0.10);
         weights.put("Speed Rating", 0.05);
-        weights.put("USB Ports", 0.05);
-        weights.put("Other Ports", 0.05);
+        weights.put("USB ports", 0.05);
+        weights.put("Other ports", 0.05);
         weights.put("Display", 0.05);
         weights.put("Weight", 0.05);
-
+    
         for (Map.Entry<String, Object> entry : filters.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
-
+    
             switch (key) {
                 case "minPrice":
                 case "maxPrice":
@@ -301,49 +301,118 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
                         score += weights.get("Price");
                     }
                     break;
-
+    
                 case "Brand":
                     List<String> selectedBrands = (List<String>) value;
                     if (selectedBrands.contains(laptop[0].trim())) {
                         score += weights.get("Brand");
                     }
                     break;
-
+    
                 case "Type":
                     List<String> selectedTypes = (List<String>) value;
                     if (selectedTypes.contains(laptop[3].trim())) {
                         score += weights.get("Type");
                     }
                     break;
-
+    
+                case "CPU Brand":
+                    List<String> selectedCPUBrands = (List<String>) value;
+                    if (selectedCPUBrands.contains(laptop[5].trim())) {
+                        score += weights.get("CPU Brand");
+                    }
+                    break;
+    
+                case "GPU brand":
+                    List<String> selectedGPUBrands = (List<String>) value;
+                    if (selectedGPUBrands.contains(laptop[13].trim())) {
+                        score += weights.get("GPU brand");
+                    }
+                    break;
+    
+                case "RAM":
+                    int requiredRAM = Integer.parseInt(value.toString());
+                    int actualRAM = Integer.parseInt(laptop[10].trim());
+                    if (actualRAM >= requiredRAM) {
+                        score += weights.get("RAM");
+                    } else {
+                        score += weights.get("RAM") * (actualRAM / (double)requiredRAM);
+                    }
+                    break;
+    
+                case "Storage":
+                    int requiredStorage = Integer.parseInt(value.toString());
+                    int actualStorage = Integer.parseInt(laptop[11].trim());
+                    if (actualStorage >= requiredStorage) {
+                        score += weights.get("Storage");
+                    } else {
+                        score += weights.get("Storage") * (actualStorage / (double)requiredStorage);
+                    }
+                    break;
+    
                 case "Rating (1-10)":
                     int requiredRating = Integer.parseInt(value.toString());
                     int actualRating = Integer.parseInt(laptop[1].trim());
                     score += weights.get("Rating") * (1 - Math.abs(actualRating - requiredRating)/10.0);
                     break;
-
+    
                 case "Speed Rating (1-10)":
                     int requiredSpeed = Integer.parseInt(value.toString());
                     int actualSpeed = Integer.parseInt(laptop[9].trim());
                     score += weights.get("Speed Rating") * (1 - Math.abs(actualSpeed - requiredSpeed)/10.0);
                     break;
-
-                // Add other criteria here...
+    
+                    case "USB ports":
+                    List<String> usbPorts = (List<String>) value;
+                    int requiredUSB = Integer.parseInt(usbPorts.get(0).trim()); // 获取第一个值
+                    int actualUSB = Integer.parseInt(laptop[15].trim());
+                    if (actualUSB >= requiredUSB) {
+                        score += weights.get("USB ports");
+                    } else {
+                        score += weights.get("USB ports") * (actualUSB / (double)requiredUSB);
+                    }
+                    break;
+    
+                case "Other ports":
+                    List<String> selectedPorts = (List<String>) value;
+                    String[] laptopPorts = laptop[16].trim().split(";");
+                    for (String port : selectedPorts) {
+                        if (Arrays.asList(laptopPorts).contains(port)) {
+                            score += weights.get("Other ports") / selectedPorts.size();
+                        }
+                    }
+                    break;
+    
+                case "Display":
+                    double requiredDisplay = Double.parseDouble(value.toString());
+                    double actualDisplay = Double.parseDouble(laptop[18].trim());
+                    score += weights.get("Display") * (1 - Math.abs(actualDisplay - requiredDisplay)/10.0);
+                    break;
+    
+                case "Weight":
+                    double maxWeight = Double.parseDouble(value.toString());
+                    double actualWeight = Double.parseDouble(laptop[21].trim());
+                    if (actualWeight <= maxWeight) {
+                        score += weights.get("Weight");
+                    } else {
+                        score += weights.get("Weight") * (maxWeight/actualWeight);
+                    }
+                    break;
             }
         }
-
+    
         return score * 100; // Convert to percentage
     }
-
+    
     private boolean checkHardConstraints(String[] laptop, Map<String, Object> filters) {
         // Check OS
         if (filters.containsKey("OS")) {
-            String requiredOS = (String) filters.get("OS");
-            if (!laptop[17].trim().equals(requiredOS)) {
+            List<String> requiredOS = (List<String>) filters.get("OS");
+            if (!requiredOS.contains(laptop[17].trim())) {
                 return false;
             }
         }
-
+    
         // Check Touchscreen
         if (filters.containsKey("Touchscreen")) {
             boolean touchRequired = Boolean.parseBoolean(filters.get("Touchscreen").toString());
@@ -352,7 +421,7 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
                 return false;
             }
         }
-
+    
         return true;
     }
 
