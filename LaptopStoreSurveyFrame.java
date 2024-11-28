@@ -334,10 +334,14 @@ public class LaptopStoreSurveyFrame extends JFrame {
             JComponent component = entry.getValue();
             
             if (component instanceof JPanel) {
-                ArrayList<String> selectedValues = new ArrayList<>();  // 改为直接使用ArrayList
+                ArrayList<String> selectedValues = new ArrayList<>();
                 for (Component c : ((JPanel)component).getComponents()) {
                     if (c instanceof JCheckBox && ((JCheckBox)c).isSelected()) {
-                        selectedValues.add(((JCheckBox)c).getText());
+                        // Strip HTML tags from checkbox text
+                        String text = ((JCheckBox)c).getText()
+                            .replaceAll("<[^>]*>", "") // Remove HTML tags
+                            .trim();
+                        selectedValues.add(text);
                     }
                 }
                 if (!selectedValues.isEmpty()) {
