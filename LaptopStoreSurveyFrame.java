@@ -307,6 +307,8 @@ public class LaptopStoreSurveyFrame extends JFrame {
                 System.out.println(entry.getKey() + ": " + entry.getValue());
             }
             dispose();  // Close Current Window
+            LaptopStoreResultsFrame frame = new LaptopStoreResultsFrame();  // Open new ResultsFrame
+            frame.setFilterValues(values);  // 使用新的方法名
         });
     }
 
