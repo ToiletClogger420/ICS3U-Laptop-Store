@@ -90,14 +90,25 @@ public class LaptopStoreSurveyFrame extends JFrame {
     }
 
     private void initializeComponents() {
+        // Create a scrollable panel
         leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         leftPanel.setBackground(Color.WHITE);
         leftPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        leftPanel.setPreferredSize(new Dimension(1600, 900)); // 调整左面板大小
 
+        // Create a scroll pane for the left panel
+        JScrollPane leftScrollPane = new JScrollPane(leftPanel);
+        leftScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        leftScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        leftScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        leftScrollPane.setBorder(null);
+        
+        // Set preferred size for the scroll pane
+        leftScrollPane.setPreferredSize(new Dimension(1600, 900));
+
+        // Initialize all components
         initializePriceRange();
-        initializeCheckBoxes("Brand", 4); // 增加行数以适应更大的空间
+        initializeCheckBoxes("Brand", 4);
         initializeCheckBoxes("Type (ex. Student; Professional; Gaming; etc.)", 3);
         initializeCheckBoxes("CPU - Brand", 3);
         initializeCheckBoxes("GPU brand", 3);
@@ -120,7 +131,10 @@ public class LaptopStoreSurveyFrame extends JFrame {
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.setBackground(BACKGROUND_COLOR);
         rightPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        rightPanel.setPreferredSize(new Dimension(200, 1080)); // 调整右面板大小
+        rightPanel.setPreferredSize(new Dimension(200, 1080));
+        
+        // Add the scroll pane to the main panel
+        mainPanel.add(leftScrollPane, BorderLayout.CENTER);
     }
 
     private void initializePriceRange() {
@@ -161,21 +175,50 @@ public class LaptopStoreSurveyFrame extends JFrame {
         Set<String> options = optionsMap.get(category);
         if (options == null || options.isEmpty()) return;
 
-        JPanel panel = new JPanel(new GridLayout(0, 4, 10, 10)); // 改为4列并增加间距
-        panel.setMaximumSize(new Dimension(1500, rows * 40)); // 调整尺寸
+        // Use GridBagLayout instead of GridLayout for better control
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(5, 5, 5, 5); // Add padding
+        
+        panel.setMaximumSize(new Dimension(1500, rows * 50)); // Increased height per row
         String displayName = DISPLAY_NAMES.getOrDefault(category, category);
-        panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY), displayName, 
-                       TitledBorder.LEFT, TitledBorder.TOP, LABEL_FONT));
+        panel.setBorder(BorderFactory.createTitledBorder(
+            BorderFactory.createLineBorder(Color.LIGHT_GRAY), 
+            displayName, 
+            TitledBorder.LEFT, 
+            TitledBorder.TOP, 
+            LABEL_FONT
+        ));
 
+        int col = 0;
+        int row = 0;
         for (String option : options) {
-            JCheckBox checkBox = new JCheckBox(option);
-            checkBox.setFont(new Font("Segoe UI", Font.PLAIN, 18)); // 设置选项字体
-            panel.add(checkBox);
+            JCheckBox checkBox = new JCheckBox("<html><body style='width: 150px'>" + option + "</body></html>");
+            checkBox.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+            
+            gbc.gridx = col;
+            gbc.gridy = row;
+            gbc.weightx = 1.0;
+            panel.add(checkBox, gbc);
+
+            col++;
+            if (col >= 4) {
+                col = 0;
+                row++;
+            }
         }
 
-        int cells = rows * 4;
-        while (panel.getComponentCount() < cells) {
-            panel.add(new JLabel());
+        // Fill remaining cells if needed
+        while (row < rows || (row == rows - 1 && col > 0)) {
+            gbc.gridx = col;
+            gbc.gridy = row;
+            panel.add(Box.createHorizontalStrut(150), gbc);
+            col++;
+            if (col >= 4) {
+                col = 0;
+                row++;
+            }
         }
 
         filterComponents.put(category, panel);
@@ -216,15 +259,9 @@ public class LaptopStoreSurveyFrame extends JFrame {
     }
 
     private void layoutComponents() {
-        scrollPane = new JScrollPane(leftPanel);
-        scrollPane.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.getVerticalScrollBar().setUnitIncrement(16); // 改善滚动体验
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
-
         rightPanel.add(Box.createVerticalGlue());
         rightPanel.add(clearButton);
-        rightPanel.add(Box.createVerticalStrut(20)); // 增加按钮间距
+        rightPanel.add(Box.createVerticalStrut(20));
         rightPanel.add(backButton);
         rightPanel.add(Box.createVerticalStrut(20));
         rightPanel.add(continueButton);
