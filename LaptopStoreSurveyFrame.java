@@ -243,6 +243,17 @@ public class LaptopStoreSurveyFrame extends JFrame {
         button.setForeground(Color.WHITE);
         button.setFocusPainted(false);
         button.setBorderPainted(false);
+        button.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) {
+                button.setBackground(new Color(0, 85, 227));
+                setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+            
+            public void mouseExited(MouseEvent e) {
+                button.setBackground(new Color(13, 110, 253));
+                setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
         return button;
     }
 
