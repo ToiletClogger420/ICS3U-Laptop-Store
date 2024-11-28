@@ -231,7 +231,7 @@ public class LaptopStoreSurveyFrame extends JFrame {
         });
         continueButton.addActionListener(e -> {
             Map<String, Object> values = getFilterValues();
-            // 打印选中的值用于测试
+            // Print it out for debugging purposes
             for (Map.Entry<String, Object> entry : values.entrySet()) {
                 System.out.println(entry.getKey() + ": " + entry.getValue());
             }
@@ -263,7 +263,7 @@ public class LaptopStoreSurveyFrame extends JFrame {
             JComponent component = entry.getValue();
             
             if (component instanceof JPanel) {
-                ArrayList<String> selectedValues = new ArrayList<>();  // 改为直接使用ArrayList
+                ArrayList<String> selectedValues = new ArrayList<>();
                 for (Component c : ((JPanel)component).getComponents()) {
                     if (c instanceof JCheckBox && ((JCheckBox)c).isSelected()) {
                         selectedValues.add(((JCheckBox)c).getText());

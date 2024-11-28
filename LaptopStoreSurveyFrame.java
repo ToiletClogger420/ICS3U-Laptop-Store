@@ -83,9 +83,9 @@ public class LaptopStoreSurveyFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         
-        mainPanel = new JPanel(new BorderLayout(20, 20)); // 增加间距
+        mainPanel = new JPanel(new BorderLayout(20, 20));
         mainPanel.setBackground(BACKGROUND_COLOR);
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25)); // 增加边距
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
         setContentPane(mainPanel);
     }
 
@@ -143,7 +143,7 @@ public class LaptopStoreSurveyFrame extends JFrame {
         double maxPrice = prices.stream().mapToDouble(p -> Double.parseDouble(p)).max().getAsDouble();
         
         JPanel pricePanel = new JPanel(new BorderLayout(10, 0));
-        pricePanel.setMaximumSize(new Dimension(1500, 60)); // 调整尺寸
+        pricePanel.setMaximumSize(new Dimension(1500, 60));
         
         JSpinner minSpinner = new JSpinner(new SpinnerNumberModel(minPrice, minPrice, maxPrice, 50.0));
         JSpinner maxSpinner = new JSpinner(new SpinnerNumberModel(maxPrice, minPrice, maxPrice, 50.0));
@@ -156,7 +156,7 @@ public class LaptopStoreSurveyFrame extends JFrame {
         JPanel spinnerPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         spinnerPanel.add(new JLabel("Min: $"));
         spinnerPanel.add(minSpinner);
-        spinnerPanel.add(Box.createHorizontalStrut(20)); // 增加间距
+        spinnerPanel.add(Box.createHorizontalStrut(20));
         spinnerPanel.add(new JLabel("Max: $"));
         spinnerPanel.add(maxSpinner);
 
@@ -247,7 +247,7 @@ public class LaptopStoreSurveyFrame extends JFrame {
 
     private void initializeCheckBox(String category) {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setMaximumSize(new Dimension(1500, 40)); // 调整尺寸
+        panel.setMaximumSize(new Dimension(1500, 40));
         
         JCheckBox checkBox = new JCheckBox(category);
         checkBox.setFont(LABEL_FONT);
@@ -273,7 +273,7 @@ public class LaptopStoreSurveyFrame extends JFrame {
     private JButton createStyledButton(String text) {
         JButton button = new JButton(text);
         button.setFont(LABEL_FONT);
-        button.setMaximumSize(new Dimension(150, 40)); // 增大按钮尺寸
+        button.setMaximumSize(new Dimension(150, 40));
         button.setPreferredSize(new Dimension(150, 40));
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.setBackground(new Color(13, 110, 253));
@@ -302,7 +302,7 @@ public class LaptopStoreSurveyFrame extends JFrame {
         });
         continueButton.addActionListener(e -> {
             Map<String, Object> values = getFilterValues();
-            // 打印选中的值用于测试
+            // Print the selected values for testing
             for (Map.Entry<String, Object> entry : values.entrySet()) {
                 System.out.println(entry.getKey() + ": " + entry.getValue());
             }
