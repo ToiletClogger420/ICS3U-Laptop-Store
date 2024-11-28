@@ -11,7 +11,7 @@ public class LaptopStoreTitleFrame extends JFrame implements ActionListener {
     private static final int TITLE_SIZE = 48; // 增大标题字体
     private static final int BUTTON_TEXT_SIZE = 20; // 增大按钮字体
     
-    private JLabel titleLabel = new JLabel("Laptop Store");
+    private JLabel titleLabel = new JLabel("DCS Computers - Laptop Store");
     private ImageIcon originalLogo = new ImageIcon("images/logo.png");
     private ImageIcon logo;
     private JLabel logoLabel;
