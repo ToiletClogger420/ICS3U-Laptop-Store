@@ -76,13 +76,9 @@ public class LaptopStoreSurveyFrame extends JFrame {
         setSize(1920, 1080);
         
         // setting logo of window
-        ImageIcon icon = new ImageIcon("images/logo_square.png");
+        ImageIcon icon = new ImageIcon("images/logo.png");
         Image scaledIcon = icon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
         setIconImage(scaledIcon);
-        
-    	//create and set image icon
-    	ImageIcon img = new ImageIcon("images/logo.png");
-    	setIconImage(img.getImage());
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
