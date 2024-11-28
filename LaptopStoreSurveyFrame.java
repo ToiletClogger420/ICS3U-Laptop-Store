@@ -306,6 +306,7 @@ public class LaptopStoreSurveyFrame extends JFrame {
             for (Map.Entry<String, Object> entry : values.entrySet()) {
                 System.out.println(entry.getKey() + ": " + entry.getValue());
             }
+            dispose();  // Close Current Window
         });
     }
 

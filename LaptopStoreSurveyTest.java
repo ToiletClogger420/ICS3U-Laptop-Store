@@ -9,12 +9,11 @@ public class LaptopStoreSurveyTest {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 LaptopStoreSurveyFrame frame = new LaptopStoreSurveyFrame();
-                
-                // 添加窗口关闭监听器
+                frame.setTitle("Laptop Store Survey");
                 frame.addWindowListener(new WindowAdapter() {
                     @Override
                     public void windowClosing(WindowEvent e) {
-                        // 获取并打印过滤结果
+                        // get and print filter value
                         Map<String, Object> filterResults = frame.getFilterValues();
                         System.out.println("\n=== Filter Results ===");
                         filterResults.forEach((key, value) -> {
