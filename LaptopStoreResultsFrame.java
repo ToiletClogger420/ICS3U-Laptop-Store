@@ -93,7 +93,7 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
         recommended1.setFont(largeFont);
         recommended1.setForeground(titleColour);
         name1.setBounds(140, 610, 350, 100);
-        price1.setBounds(140, 660, 350, 100);
+        price1.setBounds(140, 660, 450, 100);
         specs1.setBounds(135, 750, 360, 70);
         toCart1.setBounds(135, 850, 360, 70);
         setupLabels(name1, price1);
@@ -108,7 +108,7 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
         recommended2.setFont(largeFont);
         recommended2.setForeground(titleColour);
         name2.setBounds(740, 610, 350, 100);
-        price2.setBounds(740, 660, 350, 100);
+        price2.setBounds(740, 660, 450, 100);
         specs2.setBounds(735, 750, 360, 70);
         toCart2.setBounds(735, 850, 360, 70);
         setupLabels(name2, price2);
@@ -122,7 +122,7 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
         recommended3.setBounds(1400, 180, 700, 100);
         recommended3.setFont(largeFont);
         recommended3.setForeground(titleColour);
-        name3.setBounds(1340, 610, 350, 100);
+        name3.setBounds(1340, 610, 450, 100);
         price3.setBounds(1340, 660, 350, 100);
         specs3.setBounds(1335, 750, 360, 70);
         toCart3.setBounds(1335, 850, 360, 70);
