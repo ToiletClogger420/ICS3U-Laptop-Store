@@ -145,10 +145,14 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
 
     private void updateDisplay() {
         if (recommendedLaptop != null && laptops != null) {
+            // LoggerUtils.logln("Top 3 recommended laptops indices: " + 
+            //                  recommendedLaptop[0] + ", " + 
+            //                  recommendedLaptop[1] + ", " + 
+            //                  recommendedLaptop[2]); // Using SLF4J logger.
             System.out.println("Top 3 recommended laptops indices: " + 
                              recommendedLaptop[0] + ", " + 
                              recommendedLaptop[1] + ", " + 
-                             recommendedLaptop[2]);
+                             recommendedLaptop[2]); // Using System.out.println.
             
             name1.setText(laptops.get(recommendedLaptop[0] + 1)[2]);
             price1.setText("$" + laptops.get(recommendedLaptop[0] + 1)[4]);

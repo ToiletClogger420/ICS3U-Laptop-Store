@@ -304,11 +304,12 @@ public class LaptopStoreSurveyFrame extends JFrame {
             Map<String, Object> values = getFilterValues();
             // Print the selected values for testing
             for (Map.Entry<String, Object> entry : values.entrySet()) {
-                System.out.println(entry.getKey() + ": " + entry.getValue());
+                System.out.println(entry.getKey() + ": " + entry.getValue()); // Directly print out.
+                // LoggerUtils.logln(entry.getKey() + ": " + entry.getValue()); // Using SLF4J logger.
             }
             dispose();  // Close Current Window
             LaptopStoreResultsFrame frame = new LaptopStoreResultsFrame();  // Open new ResultsFrame
-            frame.setFilterValues(values);  // 使用新的方法名
+            frame.setFilterValues(values);
         });
     }
 
