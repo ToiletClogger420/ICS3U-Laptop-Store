@@ -49,18 +49,47 @@ public class LaptopStoreSurveyFrame extends JFrame {
             while ((line = br.readLine()) != null) {
                 String[] values = line.split(",");
                 for (int i = 0; i < headers.length && i < values.length; i++) {
-                    if (headers[i].trim().equals("other ports")) {
+                    String header = headers[i].trim();
+                    String trimmedValue = values[i].trim();
+                    
+                    if (header.equals("other ports")) {
                         String[] ports = values[i].split(";");
                         for (String port : ports) {
                             String trimmedPort = port.trim();
                             if (!trimmedPort.isEmpty()) {
-                                options.computeIfAbsent(headers[i], k -> new TreeSet<>()).add(trimmedPort);
+                                options.computeIfAbsent(header, k -> new TreeSet<>()).add(trimmedPort);
                             }
                         }
-                    } else {
-                        String trimmedValue = values[i].trim();
+                    } 
+                    // Special handling for RAM and Storage
+                    else if (header.equals("RAM - GB") || header.equals("SSD (GB)")) {
                         if (!trimmedValue.isEmpty()) {
-                            options.computeIfAbsent(headers[i], k -> new TreeSet<>()).add(trimmedValue);
+                            options.computeIfAbsent(header, k -> new TreeSet<>((a, b) -> {
+                                try {
+                                    return Integer.parseInt(a.replaceAll("[^0-9]", "")) - 
+                                           Integer.parseInt(b.replaceAll("[^0-9]", ""));
+                                } catch (NumberFormatException e) {
+                                    return a.compareTo(b);
+                                }
+                            })).add(trimmedValue);
+                        }
+                    }
+                    // Special handling for Weight
+                    else if (header.equals("Weight (lbs)")) {
+                        if (!trimmedValue.isEmpty()) {
+                            try {
+                                double weight = Double.parseDouble(trimmedValue);
+                                String weightRange = categorizeWeight(weight);
+                                options.computeIfAbsent(header, k -> new TreeSet<>()).add(weightRange);
+                            } catch (NumberFormatException e) {
+                                // Skip invalid weight values
+                            }
+                        }
+                    }
+                    // Default handling for other fields
+                    else {
+                        if (!trimmedValue.isEmpty()) {
+                            options.computeIfAbsent(header, k -> new TreeSet<>()).add(trimmedValue);
                         }
                     }
                 }
@@ -329,6 +358,13 @@ public class LaptopStoreSurveyFrame extends JFrame {
                 ((JCheckBox)component).setSelected(false);
             }
         }
+    }
+    
+    private String categorizeWeight(double weight) {
+        if (weight < 3.0) return "Ultra-light (< 3 lbs)";
+        else if (weight < 4.0) return "Light (3-4 lbs)";
+        else if (weight < 5.0) return "Medium (4-5 lbs)";
+        else return "Heavy (5+ lbs)";
     }
 
     public Map<String, Object> getFilterValues() {
