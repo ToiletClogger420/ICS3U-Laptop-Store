@@ -109,8 +109,8 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
         recommended2.setForeground(titleColour);
         name2.setBounds(740, 610, 350, 100);
         price2.setBounds(740, 660, 350, 100);
-        specs2.setBounds(735, 750, 360, 70);
-        toCart2.setBounds(735, 850, 360, 70);
+        specs2.setBounds(735, 750, 350, 80);
+        toCart2.setBounds(735, 850, 350, 80);
         setupLabels(name2, price2);
         setupButton(specs2);
         setupButton(toCart2);
@@ -124,8 +124,8 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
         recommended3.setForeground(titleColour);
         name3.setBounds(1340, 610, 350, 100);
         price3.setBounds(1340, 660, 350, 100);
-        specs3.setBounds(1335, 750, 360, 70);
-        toCart3.setBounds(1335, 850, 360, 70);
+        specs3.setBounds(1335, 750, 350, 80);
+        toCart3.setBounds(1335, 850, 350, 80);
         setupLabels(name3, price3);
         setupButton(specs3);
         setupButton(toCart3);
