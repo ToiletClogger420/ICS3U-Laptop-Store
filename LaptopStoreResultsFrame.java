@@ -489,6 +489,7 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent event) {
         if (event.getSource() == inventory) {
+            new LaptopStoreInventoryFrame();
             dispose();
         }
         else if (event.getSource() == survey) {
