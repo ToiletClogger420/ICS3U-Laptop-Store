@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.TreeSet;
 import java.util.ArrayList;
 import java.io.*;
+import java.util.Comparator;
 
 public class LaptopStoreSurveyFrame extends JFrame {
     private static final Color BACKGROUND_COLOR = new Color(248, 249, 250);
@@ -43,6 +44,19 @@ public class LaptopStoreSurveyFrame extends JFrame {
 
     private Map<String, Set<String>> readDatabase() {
         Map<String, Set<String>> options = new HashMap<>();
+        
+        // Create a custom comparator for weight ranges
+        Comparator<String> weightComparator = (a, b) -> {
+            // Define the order of weight categories
+            Map<String, Integer> weightOrder = new HashMap<>() {{
+                put("Ultra-light (less than 3)", 1);
+                put("Light (3-4 lbs)", 2);
+                put("Medium (4-5 lbs)", 3);
+                put("Heavy (5+ lbs)", 4);
+            }};
+            return weightOrder.get(a) - weightOrder.get(b);
+        };
+
         try (BufferedReader br = new BufferedReader(new FileReader("data/database.csv"))) {
             String[] headers = br.readLine().split(",");
             String line;
@@ -74,13 +88,14 @@ public class LaptopStoreSurveyFrame extends JFrame {
                             })).add(trimmedValue);
                         }
                     }
-                    // Special handling for Weight
+                    // Special handling for Weight with ordered categories
                     else if (header.equals("Weight (lbs)")) {
                         if (!trimmedValue.isEmpty()) {
                             try {
                                 double weight = Double.parseDouble(trimmedValue);
                                 String weightRange = categorizeWeight(weight);
-                                options.computeIfAbsent(header, k -> new TreeSet<>()).add(weightRange);
+                                options.computeIfAbsent(header, k -> new TreeSet<>(weightComparator))
+                                      .add(weightRange);
                             } catch (NumberFormatException e) {
                                 // Skip invalid weight values
                             }
@@ -361,7 +376,7 @@ public class LaptopStoreSurveyFrame extends JFrame {
     }
     
     private String categorizeWeight(double weight) {
-        if (weight < 3.0) return "Ultra-light (< 3 lbs)";
+        if (weight < 3.0) return "Ultra-light (less than 3)";
         else if (weight < 4.0) return "Light (3-4 lbs)";
         else if (weight < 5.0) return "Medium (4-5 lbs)";
         else return "Heavy (5+ lbs)";
