@@ -423,7 +423,6 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
         button.setBackground(buttonColour);
         button.setBorderPainted(false);
         button.setFocusPainted(false);
-        button.setOpaque(true);
         button.addActionListener(this);
         
         button.addMouseListener(new MouseAdapter() {
