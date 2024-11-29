@@ -423,7 +423,6 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
         button.setBackground(buttonColour);
         button.setBorderPainted(false);
         button.setFocusPainted(false);
-        button.setOpaque(true);
         button.addActionListener(this);
         
         button.addMouseListener(new MouseAdapter() {
@@ -490,6 +489,7 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent event) {
         if (event.getSource() == inventory) {
+            new LaptopStoreInventoryFrame();
             dispose();
         }
         else if (event.getSource() == survey) {
