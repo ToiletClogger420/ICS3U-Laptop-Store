@@ -45,13 +45,21 @@ The application implements a sophisticated recommendation system using weighted 
   - Touchscreen requirement match
 
 - **Similarity Calculation**:
-$$ Similarity = \frac{\sum_{i=1}^{n} w_i u_i l_i}{\sqrt{\sum_{i=1}^{n} w_i u_i^2} \sqrt{\sum_{i=1}^{n} w_i l_i^2}} $$
+  ![Similarity Formula](https://latex.codecogs.com/svg.image?Similarity=\frac{\sum_{i=1}^{n}w_i%20u_i%20l_i}{\sqrt{\sum_{i=1}^{n}w_i%20u_i^2}\sqrt{\sum_{i=1}^{n}w_i%20l_i^2}})
 
 Where:
 - $w_i$ is the weight of feature i
 - $u_i$ is the normalized user preference for feature i
 - $l_i$ is the normalized laptop value for feature i
 
+- **Feature Handling**:
+  - Numerical values are normalized to [0,1] range using:
+    ![Normalization Formula](https://latex.codecogs.com/svg.image?NormalizedValue=\frac{value-min}{max-min})
+  - Categorical features: 1 for match, 0 for no match
+  - Multi-value features: (matching items)/(total requested items)
+  - Missing values are excluded from calculation
+
+For complete mathematical details and implementation, see [Recommendation Algorithm Documentation](docs/RecommendationAlgorithmDocumentation.md).
 
 - **Feature Normalization**:
   - Numerical values are normalized to [0,1] range
