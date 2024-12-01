@@ -174,15 +174,15 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
             
             name1.setText(laptops.get(recommendedLaptop[0] + 1)[2]);
             price1.setText("$" + laptops.get(recommendedLaptop[0] + 1)[4]);
-            updatePanel(panel1, "images/laptops/laptop" + (recommendedLaptop[0]) + ".jpg");
+            updatePanel(panel1, LaptopStoreApplication.laptopArray[recommendedLaptop[0]].getIcon().toString());
 
             name2.setText(laptops.get(recommendedLaptop[1] + 1)[2]);
             price2.setText("$" + laptops.get(recommendedLaptop[1] + 1)[4]);
-            updatePanel(panel2, "images/laptops/laptop" + (recommendedLaptop[1]) + ".jpg");
-
+            updatePanel(panel2, LaptopStoreApplication.laptopArray[recommendedLaptop[1]].getIcon().toString());
+            
             name3.setText(laptops.get(recommendedLaptop[2] + 1)[2]);
             price3.setText("$" + laptops.get(recommendedLaptop[2] + 1)[4]);
-            updatePanel(panel3, "images/laptops/laptop" + (recommendedLaptop[2]) + ".jpg");
+            updatePanel(panel3, LaptopStoreApplication.laptopArray[recommendedLaptop[2]].getIcon().toString());
         }
     }
 
