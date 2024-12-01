@@ -45,13 +45,16 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
     private Map<String, Object> filtervalue;
     private List<String[]> laptops;
     
+    //Colours for aesthetics
     private static final Color titleColour = new Color(33, 37, 41);
     private static final Color buttonColour = new Color(13, 110, 253);
     private static final Color hoverColour = new Color(0, 85, 227);
-    
+
+    //Fonts
     Font mainFont = new Font("Segoe UI", Font.BOLD, 20);
     Font largeFont = new Font("Segoe UI", Font.BOLD, 35);
-    
+
+    //Swing components
     JButton inventory = new JButton("Inventory");
     JButton survey = new JButton("Back to Survey");
     JButton toTitle = new JButton("Back to title");
@@ -78,17 +81,21 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
     JPanel panel3 = new JPanel();
     
     public LaptopStoreResultsFrame() {
+        
+        //Frame settings
         setSize(1920,1080);
         setLayout(null);
         setTitle("DCS Laptops");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        
+
+        //set image icon
         ImageIcon img = new ImageIcon("images/logo_square.png");
         setIconImage(img.getImage());
         
         this.laptops = readCSV("data/database.csv");
-        
+
+        //swing components are set up
         inventory.setBounds(20, 20, 300, 80);
         setupButton(inventory);
         
@@ -110,7 +117,6 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
         setupButton(toCart1);
         add(recommended1);
         panel1.setBounds(125, 265, 380, 380);
-        panel1.setBackground(new Color(213, 255, 115));
         add(panel1);
         
         recommended2.setBounds(820, 180, 700, 100);
@@ -125,7 +131,6 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
         setupButton(toCart2);
         add(recommended2);    
         panel2.setBounds(725, 265, 380, 380);
-        panel2.setBackground(new Color(252, 255, 60));
         add(panel2);
         
         recommended3.setBounds(1400, 180, 700, 100);
@@ -139,8 +144,7 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
         setupButton(specs3);
         setupButton(toCart3);
         add(recommended3);    
-        panel3.setBounds(1325, 265, 380, 380);
-        panel3.setBackground(new Color(252, 255, 60));
+        panel3.setBounds(1325, 265, 380, 380);        
         add(panel3);
         
         setVisible(true);
@@ -182,10 +186,10 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
         }
     }
 
+    //panel update
     private void updatePanel(JPanel panel, String imagePath) {
         panel.removeAll();
         panel.setLayout(new BorderLayout());
-        panel.setBackground(new Color(255, 255, 255));
         
         ImageIcon originalIcon = new ImageIcon(imagePath);
         Image originalImage = originalIcon.getImage();
@@ -430,10 +434,11 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
 
         return numerator / (Math.sqrt(userNorm) * Math.sqrt(laptopNorm));
     }
-
-    /**
-     * Checks if laptop meets mandatory requirements (hard constraints)
-     */
+    
+    //Checks if laptop meets mandatory requirements (hard constraints)
+    //If the user selects OS, the recommended laptops must operate with their prefered OS
+    //Similarly, touchscreen laptops will be mandatory if the user chooses
+     
     private boolean checkHardConstraints(String[] laptop, Map<String, Object> filters) {
         if (filters.containsKey("OS")) {
             List<String> requiredOS = (List<String>) filters.get("OS");
@@ -453,6 +458,7 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
         return true;
     }
 
+    //button setup for swing buttons
     private void setupButton(JButton button) {
         button.setFont(mainFont);
         button.setForeground(Color.white);
@@ -460,12 +466,12 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
         button.setBorderPainted(false);
         button.setFocusPainted(false);
         button.addActionListener(this);
-        
+
+        //Add colour change when hovered
         button.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e) {
                 button.setBackground(hoverColour);
             }
-            
             public void mouseExited(MouseEvent e) {
                 button.setBackground(buttonColour);
             }
@@ -473,7 +479,8 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
         
         add(button);
     }
-    
+
+    //set swing labels
     private void setupLabels(JLabel name, JLabel price) {
         name.setFont(mainFont);
         price.setFont(mainFont);
@@ -500,6 +507,7 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
 
     private void openWebpage(String urlString) {
         try {
+            
             // Clean and encode the URL
             urlString = urlString.trim(); // Remove any whitespace
             String encodedUrl = URLEncoder.encode(urlString, StandardCharsets.UTF_8.toString())
@@ -523,6 +531,9 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
     @Override
     //action events
     public void actionPerformed(ActionEvent event) {
+
+        //The three buttons at the top
+        
         if (event.getSource() == inventory) {
         	new LaptopStoreInventoryFrame();
             dispose();
@@ -535,6 +546,9 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
             new LaptopStoreTitleFrame();
             dispose();
         }
+
+        //Specifications buttons
+            
         else if (event.getSource() == specs1 && recommendedLaptop != null) {
             String hyperlink = laptops.get(recommendedLaptop[0] + 1)[22]; // hyperlink is in column 22
             openWebpage(hyperlink);
@@ -547,7 +561,9 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
             String hyperlink = laptops.get(recommendedLaptop[2] + 1)[22];
             openWebpage(hyperlink);
         }
-        
+
+        //Add to cart buttons
+            
         else if (event.getSource() == toCart1 && recommendedLaptop != null) {
         	toCart1.setBackground(Color.white);
         	toCart1.setEnabled(false);
@@ -560,6 +576,8 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
                 }
         	});
         	toCart1.setText("Added!");
+            
+            //CODE TO ADD LAPTOP TO "CART" GOES HERE
         }
         	
         else if (event.getSource() == toCart2 && recommendedLaptop != null) {
@@ -574,7 +592,9 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
                 }
         	});
         	toCart2.setText("Added!");
-        	
+
+            //CODE TO ADD LAPTOP TO "CART" GOES HERE
+            
         }
         else if (event.getSource() == toCart3 && recommendedLaptop != null) {
         	toCart3.setBackground(Color.white);
@@ -587,7 +607,9 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
                     toCart3.setBackground(Color.white);
                 }
         	});
-        	toCart1.setText("Added!");
+        	toCart3.setText("Added!");
+
+            //CODE TO ADD LAPTOP TO "CART" GOES HERE
         }
     }
 }
