@@ -64,7 +64,7 @@ public class LaptopStoreInventoryFrame {
 		frame.setLayout(null);
 
 		//set image icon
-       		setIconImage(logo.getImage());
+       	frame.setIconImage(logo.getImage());
 		
 		setupButton(submitFiltersSorting);
 
