@@ -172,21 +172,30 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
                              recommendedLaptop[1] + ", " + 
                              recommendedLaptop[2]); 
             
-            name1.setText(laptops.get(recommendedLaptop[0] + 1)[2]);
-            price1.setText("$" + laptops.get(recommendedLaptop[0] + 1)[4]);
+            //Update each recommended slot according to the recommended laptop
+            
+            //model is taken from the laptop array
+            name1.setText(LaptopStoreApplication.laptopArray[recommendedLaptop[0]].getModel());
+            
+            //price is gotten and formatted from the laptop array as well
+            price1.setText("$" + String.format("%,.2f", LaptopStoreApplication.laptopArray[recommendedLaptop[0]].getLaptopCost()));
+            
+            //panel is updated with the recommended laptop
             updatePanel(panel1, LaptopStoreApplication.laptopArray[recommendedLaptop[0]].getIcon().toString());
 
-            name2.setText(laptops.get(recommendedLaptop[1] + 1)[2]);
-            price2.setText("$" + laptops.get(recommendedLaptop[1] + 1)[4]);
+            //repeat for the other two recommended
+            
+            name2.setText(LaptopStoreApplication.laptopArray[recommendedLaptop[1]].getModel());
+            price2.setText("$" + String.format("%,.2f", LaptopStoreApplication.laptopArray[recommendedLaptop[1]].getLaptopCost()));
             updatePanel(panel2, LaptopStoreApplication.laptopArray[recommendedLaptop[1]].getIcon().toString());
             
-            name3.setText(laptops.get(recommendedLaptop[2] + 1)[2]);
-            price3.setText("$" + laptops.get(recommendedLaptop[2] + 1)[4]);
+            name3.setText(LaptopStoreApplication.laptopArray[recommendedLaptop[2]].getModel());
+            price3.setText("$" + String.format("%,.2f", LaptopStoreApplication.laptopArray[recommendedLaptop[2]].getLaptopCost()));
             updatePanel(panel3, LaptopStoreApplication.laptopArray[recommendedLaptop[2]].getIcon().toString());
         }
     }
 
-    //panel update
+    //panel update method
     private void updatePanel(JPanel panel, String imagePath) {
         panel.removeAll();
         panel.setLayout(new BorderLayout());
