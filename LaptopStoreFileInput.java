@@ -72,9 +72,9 @@ public class LaptopStoreFileInput {
 				LaptopStoreApplication.laptopArray[index] = new Laptop(model, cpuModel, gpuModel, brand, cpuBrand,
 						gpuBrand, laptopCost, type, cores, speedGHZ, speedRating, storageRating, customerRating, ram,
 						ssd, usbPorts, otherPorts, os, displaySize, displayResolution, touchscreen, weight, link);
-
+				
 				//set image icon
-				LaptopStoreApplication.laptopArray[index].setIcon(new ImageIcon("images/laptop" + index + ".jpg"));
+				LaptopStoreApplication.laptopArray[index].setIcon(new ImageIcon("images/laptops/laptop" + index + ".jpg"));
 			}
 
 			// close input, it actually matters
