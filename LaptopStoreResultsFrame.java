@@ -39,6 +39,7 @@ class LaptopScore implements Comparable<LaptopScore> {
  * Main frame for displaying laptop recommendations based on user preferences.
  * Uses a sophisticated recommendation algorithm based on weighted cosine similarity.
  */
+@SuppressWarnings("unchecked")  // Suppress unchecked casting warnings for filter values
 public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
     private static int[] recommendedLaptop;
     private Map<String, Object> filtervalue;

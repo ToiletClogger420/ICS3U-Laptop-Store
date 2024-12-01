@@ -26,7 +26,7 @@ public class LaptopStoreInventoryFrame {
 
     static HashMap<String, Integer> cart = new HashMap<>();
 
-    static JComboBox sort = new JComboBox(sortingMethods);
+    static JComboBox sort = new JComboBox<>(sortingMethods);
 
     static JLabel filters = new JLabel("Filters");
     static JLabel pricing = new JLabel("Price:");
