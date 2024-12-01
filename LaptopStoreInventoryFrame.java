@@ -135,7 +135,7 @@ public class LaptopStoreInventoryFrame {
 		frame.add(scrollPane, BorderLayout.CENTER);
 
 		for (int i = 0; i < 30; i++) {
-			ImageIcon laptopImage = (ImageIcon) LaptopStoreApplication.laptopArray[i].getIcon();
+			ImageIcon laptopImage = new ImageIcon("images/laptop"+i+".jpg");
 			Image scaledImage = laptopImage.getImage().getScaledInstance(300, 250, Image.SCALE_SMOOTH);
 			ImageIcon resizedImage = new ImageIcon(scaledImage);
 			JLabel laptopImageLabel = new JLabel(resizedImage);
