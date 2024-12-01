@@ -44,7 +44,7 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
     Font largeFont = new Font("Segoe UI", Font.BOLD, 35);
     
     JButton inventory = new JButton("Inventory");
-    JButton survey = new JButton("Survey");
+    JButton survey = new JButton("Back to Survey");
     JButton toTitle = new JButton("Back to title");
     
     JLabel recommended1 = new JLabel("Recommended Laptop");
@@ -145,6 +145,7 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
 
     private void updateDisplay() {
         if (recommendedLaptop != null && laptops != null) {
+        	
             // LoggerUtils.logln("Top 3 recommended laptops indices: " + 
             //                  recommendedLaptop[0] + ", " + 
             //                  recommendedLaptop[1] + ", " + 
@@ -152,7 +153,7 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
             System.out.println("Top 3 recommended laptops indices: " + 
                              recommendedLaptop[0] + ", " + 
                              recommendedLaptop[1] + ", " + 
-                             recommendedLaptop[2]); // Using System.out.println.
+                             recommendedLaptop[2]); 
             
             name1.setText(laptops.get(recommendedLaptop[0] + 1)[2]);
             price1.setText("$" + laptops.get(recommendedLaptop[0] + 1)[4]);
@@ -428,12 +429,10 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
         button.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e) {
                 button.setBackground(hoverColour);
-                setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
             
             public void mouseExited(MouseEvent e) {
                 button.setBackground(buttonColour);
-                setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
         });
         
@@ -487,9 +486,10 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
     }
 
     @Override
+    //action events
     public void actionPerformed(ActionEvent event) {
         if (event.getSource() == inventory) {
-            new LaptopStoreInventoryFrame();
+        	new LaptopStoreInventoryFrame();
             dispose();
         }
         else if (event.getSource() == survey) {
@@ -501,7 +501,7 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
             dispose();
         }
         else if (event.getSource() == specs1 && recommendedLaptop != null) {
-            String hyperlink = laptops.get(recommendedLaptop[0] + 1)[22]; // Assuming hyperlink is in column 22
+            String hyperlink = laptops.get(recommendedLaptop[0] + 1)[22]; // hyperlink is in column 22
             openWebpage(hyperlink);
         }
         else if (event.getSource() == specs2 && recommendedLaptop != null) {
@@ -511,6 +511,48 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
         else if (event.getSource() == specs3 && recommendedLaptop != null) {
             String hyperlink = laptops.get(recommendedLaptop[2] + 1)[22];
             openWebpage(hyperlink);
+        }
+        
+        else if (event.getSource() == toCart1 && recommendedLaptop != null) {
+        	toCart1.setBackground(Color.white);
+        	toCart1.setEnabled(false);
+        	toCart1.addMouseListener(new MouseAdapter() {
+                public void mouseEntered(MouseEvent e) {
+                    toCart1.setBackground(Color.white);
+                }
+                public void mouseExited(MouseEvent e) {
+                    toCart1.setBackground(Color.white);
+                }
+        	});
+        	toCart1.setText("Added!");
+        }
+        	
+        else if (event.getSource() == toCart2 && recommendedLaptop != null) {
+        	toCart2.setBackground(Color.white);
+        	toCart2.setEnabled(false);
+        	toCart2.addMouseListener(new MouseAdapter() {
+                public void mouseEntered(MouseEvent e) {
+                    toCart2.setBackground(Color.white);
+                }
+                public void mouseExited(MouseEvent e) {
+                    toCart2.setBackground(Color.white);
+                }
+        	});
+        	toCart2.setText("Added!");
+        	
+        }
+        else if (event.getSource() == toCart3 && recommendedLaptop != null) {
+        	toCart3.setBackground(Color.white);
+        	toCart3.setEnabled(false);
+        	toCart3.addMouseListener(new MouseAdapter() {
+                public void mouseEntered(MouseEvent e) {
+                    toCart3.setBackground(Color.white);
+                }
+                public void mouseExited(MouseEvent e) {
+                    toCart3.setBackground(Color.white);
+                }
+        	});
+        	toCart1.setText("Added!");
         }
     }
 }
