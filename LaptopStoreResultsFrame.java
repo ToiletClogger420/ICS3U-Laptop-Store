@@ -16,9 +16,13 @@ import java.io.*;
 import java.util.*;
 import java.util.List;
 
+/**
+ * Class to store a laptop's index and its similarity score for ranking purposes.
+ * Implements Comparable to allow sorting of recommendations.
+ */
 class LaptopScore implements Comparable<LaptopScore> {
-    int index;
-    double score;
+    int index;     // Index of the laptop in the database
+    double score;  // Similarity score computed for this laptop
 
     public LaptopScore(int index, double score) {
         this.index = index;
@@ -27,10 +31,14 @@ class LaptopScore implements Comparable<LaptopScore> {
 
     @Override
     public int compareTo(LaptopScore other) {
-        return Double.compare(other.score, this.score); // Sort in descending order
+        return Double.compare(other.score, this.score); // Sort in descending order (highest score first)
     }
 }
 
+/**
+ * Main frame for displaying laptop recommendations based on user preferences.
+ * Uses a sophisticated recommendation algorithm based on weighted cosine similarity.
+ */
 public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
     private static int[] recommendedLaptop;
     private Map<String, Object> filtervalue;
@@ -137,6 +145,10 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
         setVisible(true);
     }
     
+    /**
+     * Sets user preferences and triggers recommendation calculation
+     * @param values Map containing user preferences from survey
+     */
     public void setFilterValues(Map<String, Object> values) {
         this.filtervalue = values;
         this.recommendedLaptop = findRecommended();
@@ -195,6 +207,11 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
         panel.repaint();
     }
 
+    /**
+     * Core recommendation algorithm implementation.
+     * Uses weighted cosine similarity to find the best matching laptops.
+     * @return int array containing indices of top 3 recommended laptops
+     */
     private int[] findRecommended() {
         if (filtervalue == null) {
             return null;
@@ -220,6 +237,13 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
         return topThree;
     }
 
+    /**
+     * Calculates weighted cosine similarity between user preferences and a laptop.
+     * Implements feature-specific normalization and weighting.
+     * @param laptop Array containing laptop specifications
+     * @param filters Map containing user preferences
+     * @return Similarity score between 0 and 1
+     */
     private double calculateCosineSimilarity(String[] laptop, Map<String, Object> filters) {
         if (!checkHardConstraints(laptop, filters)) {
             return 0.0;
@@ -377,10 +401,17 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
         return calculateWeightedCosineSimilarity(userVector, laptopVector, weightVector);
     }
 
+    /**
+     * Normalizes a value to range [0,1] using min-max scaling
+     */
     private double normalizeValue(double value, double min, double max) {
         return Math.max(0.0, Math.min(1.0, (value - min) / (max - min)));
     }
 
+    /**
+     * Calculates weighted cosine similarity between two vectors
+     * Formula: cos(θ) = (Σ wi·ui·li) / (sqrt(Σ wi·ui²) · sqrt(Σ wi·li²))
+     */
     private double calculateWeightedCosineSimilarity(double[] userVector, double[] laptopVector, double[] weightVector) {
         double numerator = 0.0;
         double userNorm = 0.0;
@@ -399,6 +430,9 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
         return numerator / (Math.sqrt(userNorm) * Math.sqrt(laptopNorm));
     }
 
+    /**
+     * Checks if laptop meets mandatory requirements (hard constraints)
+     */
     private boolean checkHardConstraints(String[] laptop, Map<String, Object> filters) {
         if (filters.containsKey("OS")) {
             List<String> requiredOS = (List<String>) filters.get("OS");
