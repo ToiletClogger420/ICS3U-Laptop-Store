@@ -90,8 +90,8 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
         setLocationRelativeTo(null);
 
         //set image icon
-        ImageIcon img = new ImageIcon("images/logo_square.png");
-        setIconImage(img.getImage());
+        ImageIcon icon = new ImageIcon("images/logo_square.png");
+        setIconImage(icon.getImage());
         
         this.laptops = readCSV("data/database.csv");
 
@@ -108,7 +108,7 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
         recommended1.setBounds(125, 180, 700, 100);
         recommended1.setFont(largeFont);
         recommended1.setForeground(titleColour);
-        name1.setBounds(140, 610, 350, 100);
+        name1.setBounds(140, 620, 350, 100);
         price1.setBounds(140, 660, 350, 100);
         specs1.setBounds(135, 750, 360, 70);
         toCart1.setBounds(135, 850, 360, 70);
@@ -122,7 +122,7 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
         recommended2.setBounds(820, 180, 700, 100);
         recommended2.setFont(largeFont);
         recommended2.setForeground(titleColour);
-        name2.setBounds(740, 610, 350, 100);
+        name2.setBounds(740, 620, 350, 100);
         price2.setBounds(740, 660, 350, 100);
         specs2.setBounds(735, 750, 350, 80);
         toCart2.setBounds(735, 850, 350, 80);
@@ -136,7 +136,7 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
         recommended3.setBounds(1400, 180, 700, 100);
         recommended3.setFont(largeFont);
         recommended3.setForeground(titleColour);
-        name3.setBounds(1340, 610, 350, 100);
+        name3.setBounds(1340, 620, 350, 100);
         price3.setBounds(1340, 660, 350, 100);
         specs3.setBounds(1335, 750, 350, 80);
         toCart3.setBounds(1335, 850, 350, 80);
@@ -183,7 +183,7 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
             //panel is updated with the recommended laptop
             updatePanel(panel1, LaptopStoreApplication.laptopArray[recommendedLaptop[0]].getIcon().toString());
 
-            //repeat for the other two recommended
+            //repeat for the other two recommended laptops
             
             name2.setText(LaptopStoreApplication.laptopArray[recommendedLaptop[1]].getModel());
             price2.setText("$" + String.format("%,.2f", LaptopStoreApplication.laptopArray[recommendedLaptop[1]].getLaptopCost()));
