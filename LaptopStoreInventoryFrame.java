@@ -63,6 +63,9 @@ public class LaptopStoreInventoryFrame {
 		frame.setTitle("Laptop Inventory");
 		frame.setLayout(null);
 
+		//set image icon
+       		setIconImage(logo.getImage());
+		
 		setupButton(submitFiltersSorting);
 
 		filters.setFont(subHeadingFont);
