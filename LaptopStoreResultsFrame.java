@@ -51,7 +51,7 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
     private static final Color hoverColour = new Color(0, 85, 227);
 
     //Fonts
-    Font mainFont = new Font("Segoe UI", Font.BOLD, 20);
+    Font mainFont = new Font("Segoe UI", Font.BOLD, 22);
     Font largeFont = new Font("Segoe UI", Font.BOLD, 35);
 
     //Swing components
@@ -65,6 +65,7 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
     JButton specs1 = new JButton("Specifications");
     JButton toCart1 = new JButton("Add to cart");
     JPanel panel1 = new JPanel();
+    JPanel backgroundColour1 = new JPanel();
     
     JLabel recommended2 = new JLabel("Runner Up");
     JLabel name2 = new JLabel("");
@@ -72,6 +73,7 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
     JButton specs2 = new JButton("Specifications");
     JButton toCart2 = new JButton("Add to cart");
     JPanel panel2 = new JPanel();
+    JPanel backgroundColour2 = new JPanel();
     
     JLabel recommended3 = new JLabel("Third Option");
     JLabel name3 = new JLabel("");
@@ -79,6 +81,7 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
     JButton specs3 = new JButton("Specifications");
     JButton toCart3 = new JButton("Add to cart");
     JPanel panel3 = new JPanel();
+    JPanel backgroundColour3 = new JPanel();
     
     public LaptopStoreResultsFrame() {
         
@@ -108,21 +111,25 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
         recommended1.setBounds(125, 180, 700, 100);
         recommended1.setFont(largeFont);
         recommended1.setForeground(titleColour);
-        name1.setBounds(140, 620, 350, 100);
+        name1.setBounds(125, 620, 380, 100);
         price1.setBounds(140, 660, 350, 100);
-        specs1.setBounds(135, 750, 360, 70);
-        toCart1.setBounds(135, 850, 360, 70);
+        specs1.setBounds(135, 750, 350, 70);
+        toCart1.setBounds(135, 850, 350, 70);
         setupLabels(name1, price1);
         setupButton(specs1);
         setupButton(toCart1);
         add(recommended1);
+        
         panel1.setBounds(125, 265, 380, 380);
         add(panel1);
+        backgroundColour1.setBounds(85, 190, 460, 760);
+        backgroundColour1.setBackground(new Color(213, 255, 115));
+        add(backgroundColour1);
         
         recommended2.setBounds(820, 180, 700, 100);
         recommended2.setFont(largeFont);
         recommended2.setForeground(titleColour);
-        name2.setBounds(740, 620, 350, 100);
+        name2.setBounds(725, 620, 380, 100);
         price2.setBounds(740, 660, 350, 100);
         specs2.setBounds(735, 750, 350, 80);
         toCart2.setBounds(735, 850, 350, 80);
@@ -130,13 +137,17 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
         setupButton(specs2);
         setupButton(toCart2);
         add(recommended2);    
+        
         panel2.setBounds(725, 265, 380, 380);
         add(panel2);
+        backgroundColour2.setBounds(685, 190, 460, 760);
+        backgroundColour2.setBackground(new Color(255, 243, 115));
+        add(backgroundColour2);
         
         recommended3.setBounds(1400, 180, 700, 100);
         recommended3.setFont(largeFont);
         recommended3.setForeground(titleColour);
-        name3.setBounds(1340, 620, 350, 100);
+        name3.setBounds(1325, 620, 380, 100);
         price3.setBounds(1340, 660, 350, 100);
         specs3.setBounds(1335, 750, 350, 80);
         toCart3.setBounds(1335, 850, 350, 80);
@@ -144,8 +155,12 @@ public class LaptopStoreResultsFrame extends JFrame implements ActionListener {
         setupButton(specs3);
         setupButton(toCart3);
         add(recommended3);    
+        
         panel3.setBounds(1325, 265, 380, 380);        
         add(panel3);
+        backgroundColour3.setBounds(1285, 190, 460, 760);
+        backgroundColour3.setBackground(new Color(255, 197, 115));
+        add(backgroundColour3);
         
         setVisible(true);
     }
