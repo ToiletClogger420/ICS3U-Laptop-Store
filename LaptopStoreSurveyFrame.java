@@ -13,7 +13,7 @@ import java.util.Comparator;
 
 public class LaptopStoreSurveyFrame extends JFrame {
     private static final Color BACKGROUND_COLOR = new Color(248, 249, 250);
-    private static final Font LABEL_FONT = new Font("Segoe UI", Font.BOLD, 21);
+    private static final Font LABEL_FONT = new Font("Segoe UI", Font.BOLD, 22);
     private static final Map<String, String> DISPLAY_NAMES = new HashMap<>() {{
         put("Type (ex. Student; Professional; Gaming; etc.)", "Type");
         put("CPU - Brand", "CPU Brand");
